@@ -33,7 +33,7 @@ class ServeWithLink extends Command
         
         // Use PHP built-in server with custom ini settings and proper router
         $cmd = sprintf(
-            'php -d upload_max_filesize=128M -d post_max_size=130M -d memory_limit=512M -d max_execution_time=300 -d max_input_time=300 -S 0.0.0.0:8000 -t public %s',
+            'php -d upload_max_filesize=128M -d post_max_size=130M -d memory_limit=512M -d max_execution_time=300 -d max_input_time=300 -S localhost:8000 -t public %s',
             escapeshellarg($routerPath)
         );
         
