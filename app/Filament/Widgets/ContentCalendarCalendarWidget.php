@@ -127,16 +127,19 @@ class ContentCalendarCalendarWidget extends CalendarWidget
             'headerToolbar' => [
                 'start' => 'title',
                 'center' => '',
-                'end' => 'listWeek dayGridMonth prev today next',
+                'end' => 'listWeek timeGridWeek dayGridMonth prev today next',
             ],
             'buttonText' => [
                 'today' => 'Hari ini',
                 'dayGridMonth' => 'Bulanan',
+                'timeGridWeek' => 'Mingguan',
                 'listWeek' => 'Daftar',
             ],
             'eventDisplay' => 'block',
             'height' => 'auto',
             'contentHeight' => 'auto',
+            'slotHeight' => 20,
+            'slotDuration' => '00:30:00',
         ];
     }
 

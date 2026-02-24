@@ -16,7 +16,7 @@ class ContentCalendarView extends Page
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = -6;
 
     protected static ?string $slug = 'konten-sosmed/calendar-view';
 }

@@ -120,12 +120,12 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-user'),
             ])
             ->navigationGroups([
+                NavigationGroup::make('Konten Sosmed')->collapsed(),
                 NavigationGroup::make('Tugas')->collapsed(),
                 NavigationGroup::make('Master Data')->collapsed(),
                 NavigationGroup::make('Transaksi')->collapsed(),
                 NavigationGroup::make('Inventori')->collapsed(),
                 NavigationGroup::make('Personalia')->collapsed(),
-                NavigationGroup::make('Konten Sosmed')->collapsed(),
                 NavigationGroup::make('Laporan')->collapsed(),
                 NavigationGroup::make('Pengaturan')->collapsed(),
             ])
