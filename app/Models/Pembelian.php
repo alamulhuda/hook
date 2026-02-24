@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
@@ -14,7 +14,7 @@ class Pembelian extends Model
 
     protected $table = 'tb_pembelian';
     protected $primaryKey = 'id_pembelian';
-    
+
     // Flag to allow TukarTambah cascade deletion
     public static bool $allowTukarTambahDeletion = false;
 
@@ -46,13 +46,13 @@ class Pembelian extends Model
                 // Check if this pembelian belongs to a Tukar Tambah
                 if ($pembelian->tukarTambah()->exists()) {
                     $ttKode = $pembelian->tukarTambah?->kode ?? 'TT-XXXXX';
-                    
+
                     throw ValidationException::withMessages([
                         'id_pembelian' => "Tidak bisa hapus: Pembelian ini bagian dari Tukar Tambah ({$ttKode}). Hapus dari Tukar Tambah.",
                     ]);
                 }
             }
-            
+
             $externalPenjualanNotas = $pembelian->items()
                 ->whereHas('penjualanItems')
                 ->with(['penjualanItems.penjualan'])
@@ -230,7 +230,8 @@ class Pembelian extends Model
         $this->forceFill([
             'jenis_pembayaran' => $status,
         ])->saveQuietly();
-    }    /**
+    }
+    /**
      * Force delete this Pembelian and mark affected Penjualan as "nerfed".
      * This bypasses the regular validation that blocks deletion when items are used in Penjualan.
      *
@@ -275,11 +276,11 @@ class Pembelian extends Model
         \Illuminate\Support\Facades\DB::table('tb_pembelian_jasa')
             ->where('id_pembelian', $this->id_pembelian)
             ->delete();
-        
+
         \Illuminate\Support\Facades\DB::table('tb_pembelian_pembayaran')
             ->where('id_pembelian', $this->id_pembelian)
             ->delete();
-        
+
         \Illuminate\Support\Facades\DB::table('tb_pembelian_item')
             ->where('id_pembelian', $this->id_pembelian)
             ->delete();
