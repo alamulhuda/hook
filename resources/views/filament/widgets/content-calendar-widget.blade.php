@@ -249,6 +249,7 @@
                         tiktok: '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#000;color:#fff;font-size:9px;font-weight:700;">TT<\/span>',
                         facebook: '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#1877f2;color:#fff;font-size:10px;font-weight:700;">f<\/span>',
                         twitter: '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#000;color:#fff;font-size:10px;font-weight:700;">𝕏<\/span>',
+                        whatsapp: '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#25d366;color:#fff;font-size:8px;font-weight:700;">WA<\/span>',
                         youtube: '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#ff0000;color:#fff;font-size:10px;font-weight:700;">▶<\/span>',
                         linkedin: '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#0a66c2;color:#fff;font-size:10px;font-weight:700;">in<\/span>',
                     };

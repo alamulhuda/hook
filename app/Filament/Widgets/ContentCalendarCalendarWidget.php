@@ -81,6 +81,7 @@ class ContentCalendarCalendarWidget extends CalendarWidget
         $tipeLabels = [
             'feed' => 'Feed',
             'story' => 'Story',
+            'short' => 'Short',
             'reels' => 'Reels',
             'carousel' => 'Carousel',
             'video' => 'Video',

@@ -16,6 +16,7 @@ class ContentCalendar extends Model implements HasMedia
         'tanggal_publish',
         'content_pillar',
         'platform',
+        'akun',
         'tipe_konten',
         'status',
         'caption',
@@ -29,6 +30,7 @@ class ContentCalendar extends Model implements HasMedia
     protected $casts = [
         'tanggal_publish' => 'datetime',
         'platform' => 'array',
+        'akun' => 'array',
         'visual' => 'array',
     ];
 
