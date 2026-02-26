@@ -98,9 +98,9 @@ class PenjadwalanServiceResource extends BaseResource
                                             ->label('Import dari Nota Penjualan')
                                             ->prefixIcon('heroicon-m-arrow-down-tray')
                                             ->searchable()
-                                            ->options(fn () => \App\Models\Penjualan::latest('created_at')->limit(50)->pluck('no_nota', 'id_penjualan'))
-                                            ->getSearchResultsUsing(fn (string $search) => \App\Models\Penjualan::where('no_nota', 'like', "%{$search}%")->limit(50)->pluck('no_nota', 'id_penjualan'))
-                                            ->getOptionLabelUsing(fn ($value): ?string => \App\Models\Penjualan::find($value)?->no_nota)
+                                            ->options(fn() => \App\Models\Penjualan::latest('created_at')->limit(50)->pluck('no_nota', 'id_penjualan'))
+                                            ->getSearchResultsUsing(fn(string $search) => \App\Models\Penjualan::where('no_nota', 'like', "%{$search}%")->limit(50)->pluck('no_nota', 'id_penjualan'))
+                                            ->getOptionLabelUsing(fn($value): ?string => \App\Models\Penjualan::find($value)?->no_nota)
                                             ->live()
                                             ->afterStateUpdated(function ($state, callable $set) {
                                                 if (! $state) {
@@ -164,6 +164,15 @@ class PenjadwalanServiceResource extends BaseResource
                                             ->placeholder('Cth: Lecet bezel, baut hilang satu')
                                             ->rows(2)
                                             ->columnSpanFull(),
+
+                                        Forms\Components\FileUpload::make('images')
+                                            ->label('Foto Unit / Perangkat')
+                                            ->image()
+                                            ->multiple()
+                                            ->panelLayout('grid')
+                                            ->directory('penjadwalan-service')
+                                            ->maxFiles(5)
+                                            ->columnSpanFull(),
                                     ]),
                             ])
                             ->columnSpan(['lg' => 2]),
@@ -176,7 +185,7 @@ class PenjadwalanServiceResource extends BaseResource
                                     ->schema([
                                         TextInput::make('no_resi')
                                             ->label('No. Resi')
-                                            ->default(fn () => 'SRV-'.now()->format('ymd').'-'.rand(100, 999))
+                                            ->default(fn() => 'SRV-' . now()->format('ymd') . '-' . rand(100, 999))
                                             ->readOnly() // Readonly lebih baik visualnya daripada disabled untuk ID
                                             ->required(),
 
@@ -198,7 +207,7 @@ class PenjadwalanServiceResource extends BaseResource
                                             ->relationship('technician', 'name')
                                             ->searchable()
                                             ->preload()
-                                            ->default(fn () => auth()->user()->id),
+                                            ->default(fn() => auth()->user()->id),
 
                                         Select::make('jasa_id')
                                             ->label('Layanan Utama')
@@ -216,7 +225,7 @@ class PenjadwalanServiceResource extends BaseResource
                                     ->schema([
                                         Placeholder::make('created_at')
                                             ->label('Waktu Penerimaan')
-                                            ->content(fn ($record) => $record?->created_at?->format('d M Y, H:i') ?? now()->format('d M Y, H:i')),
+                                            ->content(fn($record) => $record?->created_at?->format('d M Y, H:i') ?? now()->format('d M Y, H:i')),
                                     ]),
                             ])
                             ->columnSpan(['lg' => 1]),
@@ -248,7 +257,7 @@ class PenjadwalanServiceResource extends BaseResource
                                     ->icon('heroicon-m-cpu-chip')
                                     ->schema(static::getAttributeSchema(\App\Models\ListOs::class, 'listOs')),
                             ])
-                            ->visible(fn (\Filament\Forms\Get $get) => $get('has_crosscheck'))
+                            ->visible(fn(\Filament\Forms\Get $get) => $get('has_crosscheck'))
                             ->columnSpanFull()
                             ->contained(true),
                     ])
@@ -280,7 +289,7 @@ class PenjadwalanServiceResource extends BaseResource
                 Forms\Components\CheckboxList::make($childrenKey)
                     ->hiddenLabel()
                     ->options($parent->children->pluck('name', 'id'))
-                    ->visible(fn (\Filament\Forms\Get $get) => $get($parentKey))
+                    ->visible(fn(\Filament\Forms\Get $get) => $get($parentKey))
                     ->columns(3)
                     ->gridDirection('row')
                     ->afterStateHydrated(function ($component, $record) use ($parent, $relationName) {
@@ -334,7 +343,7 @@ class PenjadwalanServiceResource extends BaseResource
                     ->searchable(),
                 TextColumn::make('status')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
                         'pending' => 'Antrian',
                         'diagnosa' => 'Diagnosa',
                         'waiting_part' => 'Wait Part',
@@ -343,7 +352,7 @@ class PenjadwalanServiceResource extends BaseResource
                         'cancel' => 'Batal',
                         default => $state,
                     })
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'pending' => 'gray',
                         'diagnosa' => 'info',
                         'waiting_part' => 'warning',
@@ -402,14 +411,14 @@ class PenjadwalanServiceResource extends BaseResource
                         ->label('Cetak Invoice')
                         ->icon('heroicon-m-printer')
                         ->color('success')
-                        ->url(fn (PenjadwalanService $record) => route('penjadwalan-service.print', $record))
+                        ->url(fn(PenjadwalanService $record) => route('penjadwalan-service.print', $record))
                         ->openUrlInNewTab(),
                     Tables\Actions\Action::make('print_crosscheck')
                         ->label('Cetak Checklist')
                         ->icon('heroicon-m-clipboard-document-check')
                         ->color('info')
-                        ->visible(fn (PenjadwalanService $record) => $record->has_crosscheck)
-                        ->url(fn (PenjadwalanService $record) => route('penjadwalan-service.print-crosscheck', $record))
+                        ->visible(fn(PenjadwalanService $record) => $record->has_crosscheck)
+                        ->url(fn(PenjadwalanService $record) => route('penjadwalan-service.print-crosscheck', $record))
                         ->openUrlInNewTab(),
                 ])
                     ->icon('heroicon-o-ellipsis-vertical')
@@ -463,7 +472,7 @@ class PenjadwalanServiceResource extends BaseResource
                                                                     ->label('WhatsApp')
                                                                     ->icon('heroicon-m-phone')
                                                                     ->color('primary')
-                                                                    ->url(fn ($record) => 'https://wa.me/'.$record->member->no_hp, true),
+                                                                    ->url(fn($record) => 'https://wa.me/' . $record->member->no_hp, true),
                                                             ])
                                                             ->extraAttributes(['class' => 'mt-4 border-t pt-4']), // Garis pemisah tipis
                                                     ]),
@@ -481,6 +490,15 @@ class PenjadwalanServiceResource extends BaseResource
                                                             ->markdown()
                                                             ->color('gray')
                                                             ->extraAttributes(['class' => 'italic']),
+
+                                                        \Filament\Infolists\Components\ImageEntry::make('images')
+                                                            ->label('Foto Unit / Perangkat')
+                                                            ->hidden(fn($record) => ! $record->images)
+                                                            ->extraImgAttributes(['loading' => 'lazy'])
+                                                            ->height('100px')
+                                                            ->width('100px')
+                                                            ->grow(false)
+                                                            ->checkFileExistence(false),
                                                     ]),
                                             ])
                                             ->columnSpan(['lg' => 2]),
@@ -499,7 +517,7 @@ class PenjadwalanServiceResource extends BaseResource
 
                                                         TextEntry::make('status')
                                                             ->badge()
-                                                            ->formatStateUsing(fn (string $state): string => match ($state) {
+                                                            ->formatStateUsing(fn(string $state): string => match ($state) {
                                                                 'pending' => 'Antrian',
                                                                 'diagnosa' => 'Diagnosa',
                                                                 'waiting_part' => 'Wait Part',
@@ -508,7 +526,7 @@ class PenjadwalanServiceResource extends BaseResource
                                                                 'cancel' => 'Batal',
                                                                 default => $state,
                                                             })
-                                                            ->color(fn (string $state): string => match ($state) {
+                                                            ->color(fn(string $state): string => match ($state) {
                                                                 'pending' => 'gray',
                                                                 'diagnosa' => 'info',
                                                                 'waiting_part' => 'warning',
@@ -535,7 +553,7 @@ class PenjadwalanServiceResource extends BaseResource
                                                         TextEntry::make('jasa.nama_jasa')
                                                             ->label('Layanan')
                                                             ->color('primary')
-                                                            ->url(fn ($record) => $record->jasa ? JasaResource::getUrl('view', ['record' => $record->jasa]) : null),
+                                                            ->url(fn($record) => $record->jasa ? JasaResource::getUrl('view', ['record' => $record->jasa]) : null),
 
                                                         TextEntry::make('estimasi_selesai')
                                                             ->label('Deadline')
@@ -548,7 +566,7 @@ class PenjadwalanServiceResource extends BaseResource
                             ]),
 
                         \Filament\Infolists\Components\Tabs\Tab::make('Crosscheck')
-                            ->visible(fn ($record) => $record->has_crosscheck)
+                            ->visible(fn($record) => $record->has_crosscheck)
                             ->icon('heroicon-m-clipboard-document-check')
                             ->schema([
                                 InfolistGrid::make(2)
@@ -610,5 +628,4 @@ class PenjadwalanServiceResource extends BaseResource
             'edit' => Pages\EditPenjadwalanService::route('/{record}/edit'),
         ];
     }
-
 }

@@ -53,6 +53,7 @@ class ContentCalendarResource extends BaseResource
                                 ->required()
                                 ->maxLength(255)
                                 ->columnSpanFull(),
+
                             Forms\Components\RichEditor::make('caption')
                                 ->label('Caption / Body Teks')
                                 ->placeholder('Tuliskan isi caption konten di sini...')
@@ -113,11 +114,22 @@ class ContentCalendarResource extends BaseResource
                                 ->displayFormat('d M Y, H:i')
                                 ->prefixIcon('heroicon-m-calendar-days')
                                 ->required(),
+                            Forms\Components\CheckboxList::make('akun')
+                                ->label('Akun')
+                                ->options([
+                                    'Haen Komputer' => 'Haen Komputer',
+                                    'Haen Teknologi Kudus' => 'Haen Teknologi Kudus',
+                                    'Haen Teknologi' => 'Haen Teknologi Pati',
+                                    'Haen Teknologi Nusantara' => 'Haen Teknologi Nusantara',
+                                    'Haen Software' => 'Haen Software',
+                                ])
+                                ->columns(1),
                             Forms\Components\CheckboxList::make('platform')
                                 ->label('Platform Sosial Media')
                                 ->options([
                                     'instagram' => 'Instagram',
                                     'tiktok' => 'TikTok',
+                                    'whatsapp' => 'WhatsApp',
                                     'facebook' => 'Facebook',
                                     'twitter' => 'Twitter / X',
                                     'youtube' => 'YouTube',
@@ -144,6 +156,7 @@ class ContentCalendarResource extends BaseResource
                                 ->options([
                                     'feed' => 'Feed',
                                     'story' => 'Story',
+                                    'short' => 'Short',
                                     'reels' => 'Reels',
                                     'carousel' => 'Carousel',
                                     'video' => 'Video',
@@ -219,6 +232,7 @@ class ContentCalendarResource extends BaseResource
                     ->formatStateUsing(fn(?string $state) => match ($state) {
                         'feed' => 'Feed',
                         'story' => 'Story',
+                        'short' => 'Short',
                         'reels' => 'Reels',
                         'carousel' => 'Carousel',
                         'video' => 'Video',
@@ -231,13 +245,26 @@ class ContentCalendarResource extends BaseResource
                     ->formatStateUsing(fn(string $state) => match ($state) {
                         'instagram' => '📷 IG',
                         'tiktok' => '🎵 TikTok',
+                        'whatsapp' => '📱 WhatsApp',
                         'facebook' => '📘 FB',
                         'twitter' => '𝕏 Twitter',
                         'youtube' => '▶️ YT',
                         'linkedin' => '💼 LinkedIn',
                         default => $state,
                     })
-                    ->color('gray'),
+                    ->color('info'),
+                Tables\Columns\TextColumn::make('akun')
+                    ->label('Akun')
+                    ->badge()
+                    ->color('success')
+                    ->formatStateUsing(fn(?string $state) => match ($state) {
+                        'Haen Komputer' => 'Haen Komputer',
+                        'Haen Teknologi Kudus' => 'Haen Teknologi Kudus',
+                        'Haen Teknologi' => 'Haen Teknologi Pati',
+                        'Haen Teknologi Nusantara' => 'Haen Teknologi Nusantara',
+                        'Haen Software' => 'Haen Software',
+                        default => $state ?? '-',
+                    }),
                 Tables\Columns\TextColumn::make('creator.name')
                     ->label('Dibuat Oleh')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -368,6 +395,18 @@ class ContentCalendarResource extends BaseResource
                                     'twitter' => '𝕏 Twitter',
                                     'youtube' => '▶️ YT',
                                     'linkedin' => '💼 LinkedIn',
+                                    default => $state,
+                                }),
+                            Infolists\Components\TextEntry::make('akun')
+                                ->label('Akun')
+                                ->badge()
+                                ->color('success')
+                                ->formatStateUsing(fn(string $state) => match ($state) {
+                                    'Haen Komputer' => 'Haen Komputer',
+                                    'Haen Teknologi Kudus' => 'Haen Teknologi Kudus',
+                                    'Haen Teknologi' => 'Haen Teknologi Pati',
+                                    'Haen Teknologi Nusantara' => 'Haen Teknologi Nusantara',
+                                    'Haen Software' => 'Haen Software',
                                     default => $state,
                                 }),
                             Infolists\Components\Grid::make(2)
