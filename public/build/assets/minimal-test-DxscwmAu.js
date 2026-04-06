@@ -1,0 +1,1 @@
+import{d as s,g as t,a,t as o,r as n,o as c}from"./app-CFXiGXTN.js";const l={class:"p-8"},r={class:"text-2xl font-bold"},d=s({__name:"minimal-test",setup(i){const e=n("Hello from minimal Vue!");return(m,_)=>(c(),t("div",l,[a("h1",r,o(e.value),1)]))}});export{d as default};

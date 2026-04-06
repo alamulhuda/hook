@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "context7-mcp"],
+      "env": {}
+    },
+    "mysql": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-mysql"],
+      "env": {
+        "MYSQL_HOST": "localhost",
+        "MYSQL_PORT": "3306",
+        "MYSQL_USER": "root",
+        "MYSQL_PASSWORD": "",
+        "MYSQL_DATABASE": "hook"
+      }
+    },
+    "docker": {
+      "command": "docker",
+      "args": ["run", "--rm", "-i", "--network=host", "cloudflare/cloudflare-warp:latest"],
+      "env": {}
+    }
+  }
+}
