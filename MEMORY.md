@@ -98,11 +98,38 @@ resolve: (name) => {
 - Blank page issue: ✅ Fixed (APP_DEBUG=false)
 - Vue pages: ✅ All Inertia pages rendering
 
+---
+
+## Phase 2: Transactions (In Progress - 2026-04-06)
+
+### Sub-Phase 1: CRUCIAL - Penjualan ✅
+- [x] PenjualanController (index, create, store, show, edit, update, destroy)
+- [x] Routes: /app/admin/transactions/penjualan
+- [x] Vue Index page: List with stats, filters, pagination
+- [x] Vue Create page: Form with nested items (Repeater pattern)
+- [x] Vue Show page: Transaction detail view
+- [ ] Vue Edit page: (pending)
+
+### Sub-Phase 2: IMPORTANT - Penjualan Payment
+- [ ] Payment processing UI (cash, transfer, etc.)
+- [ ] Payment recording
+
+### Sub-Phase 3: IMPORTANT - Pembelian
+- [ ] PembelianController
+- [ ] Routes: /app/admin/transactions/pembelian
+- [ ] Vue Index page
+- [ ] Vue Create/Edit pages
+
+### Sub-Phase 4: NICE TO HAVE
+- [ ] TukarTambah basic form
+- [ ] Serial number tracking
+
 ## Next Steps When Resuming
 
-1. **Continue Phase 2** - Transactions (Penjualan, Pembelian, Tukar Tambah)
-2. **Fix storage permissions** - `/var/www/storage` owned by wrong user in container
-3. **Add real-time features** - Laravel Echo setup
+1. **Continue Phase 2 Sub-Phase 2** - Penjualan Payment UI
+2. **Phase 2 Sub-Phase 3** - Pembelian resources
+3. **Fix storage permissions** - `/var/www/storage` owned by wrong user in container
+4. **Add real-time features** - Laravel Echo setup
 
 ## Docker
 - Containers: arabica-app, arabica-nginx, arabica-db

@@ -213,3 +213,6 @@ Route::get('/penjadwalan-service/print-crosscheck/{record}', function (\App\Mode
 Route::get('/offline', function () {
     return view('vendor.laravelpwa.offline');
 })->name('offline');
+
+// Inertia routes (included from inertia.php)
+require_once __DIR__.'/inertia.php';

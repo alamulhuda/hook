@@ -61,9 +61,9 @@ const subNavigation: Record<string, NavItem[]> = {
         { label: 'Akun Transaksi', icon: FileText, href: '/app/admin/master-data/akun-transaksi' },
     ],
     'transactions': [
-        { label: 'Penjualan', icon: ShoppingCart, href: '/app/admin/penjualan' },
-        { label: 'Pembelian', icon: ShoppingCart, href: '/app/admin/pembelian' },
-        { label: 'Tukar Tambah', icon: ShoppingCart, href: '/app/admin/tukar-tambah' },
+        { label: 'Penjualan', icon: ShoppingCart, href: '/app/admin/transactions/penjualan' },
+        { label: 'Pembelian', icon: ShoppingCart, href: '/app/admin/transactions/pembelian' },
+        { label: 'Tukar Tambah', icon: ShoppingCart, href: '/app/admin/transactions/tukar-tambah' },
     ],
     'inventory': [
         { label: 'Stock Adjustment', icon: Package, href: '/app/admin/inventory/stock-adjustment' },
