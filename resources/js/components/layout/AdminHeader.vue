@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { Menu, Bell, Search, Sun, Moon } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
@@ -9,6 +9,9 @@ import Input from '@/components/ui/input.vue'
 const props = defineProps<{
     class?: string
 }>()
+
+// Get mobile menu toggle from AdminSidebar
+const toggleMobileMenu = inject<() => void>('toggleMobileMenu')
 
 const isDark = ref(false)
 const showSearch = ref(false)
@@ -27,11 +30,9 @@ function toggleDark() {
             props.class
         )"
     >
-        <slot name="toggle">
-            <Button variant="ghost" size="icon" class="lg:hidden">
-                <Menu class="h-5 w-5" />
-            </Button>
-        </slot>
+        <Button variant="ghost" size="icon" class="lg:hidden" @click="toggleMobileMenu">
+            <Menu class="h-5 w-5" />
+        </Button>
         
         <div class="flex-1" />
         

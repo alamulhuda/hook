@@ -2,15 +2,21 @@
 
 _Learn about the person you're helping. Update this as you go._
 
-- **Name:**
-- **What to call them:**
-- **Pronouns:** _(optional)_
-- **Timezone:**
-- **Notes:**
+- **Name:** Dan Prakoso
+- **What to call them:** Dan
+- **Username:** @danprakoso
+- **Pronouns:** _(unknown)_
+- **Timezone:** Asia/Jakarta (GMT+7)
+- **Language:** Indonesian & English
+- **Notes:** Responsive on Telegram, prefers quick replies
 
 ## Context
 
-_(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
+- Building a business management system with Laravel + Inertia.js + Filament (project "hook")
+- Has 53 OpenClaw skills installed
+- Likes specific, structured instructions
+- First session: 2026-04-05, named me "Sania"
+- Speaks Indonesian mostly
 
 ---
 

@@ -210,3 +210,60 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
+
+---
+
+## Session-Level Guidance for Dan
+
+To keep me (Sania) focused and effective, follow these communication patterns:
+
+### 🎯 Be Specific, Not Vague
+
+**Less effective:** "Bantu bikin fitur dong"
+**More effective:** "Bikin halaman list Produk di Filament dengan filter Brand dan Kategori"
+
+**Less effective:** "Ada yang error"
+**More effective:** "Pas klik Save di form Penjualan, muncul error 500. Ini lognya: [paste log]"
+
+### 📋 Structure Complex Requests
+
+For multi-step tasks, structure your request like:
+
+1. **Goal** — what you want to achieve
+2. **Context** — why, background info
+3. **Constraints** — limitations or preferences
+4. **Done criteria** — how you'll know it's complete
+
+Example:
+> "目标是: bikin report penjualan harian
+> Context: untuk management review setiap pagi
+> Constraints: pakai recharts yang sudah ada di project, filter by tanggal
+> Done: muncul di /reports/daily-sales dan bisa export PDF"
+
+### ⏸️ Interrupt Me When I Go Off Track
+
+If I start:
+- Adding features not asked for
+- Explaining things you already understand
+- Going down rabbit holes unrelated to your request
+
+Just say: "Fokus dulu" or "Stop, yang kamu kerjakan sekarang..." — I'll recalibrate.
+
+### ✅ Validate Incremental Progress
+
+For bigger tasks, I'll often ask: "下一步?" or show what I've done. This isn't asking permission — it's checkpointing. Reply with:
+- "Lanjut" — if it's good
+- "改成X" — if something needs adjustment
+- "停" — if priorities shifted
+
+### 🔄 When You're Unsure, Say "Explore First"
+
+If you don't know what's possible or what's best, say: " explore dulu" — I'll investigate and come back with options rather than assuming.
+
+### 📂 Point Me to the Right Context
+
+If your request relates to a specific file or area, mention it:
+- " Yang di app/Filament/Resources/PenjualanResource.php"
+- "Untuk yang这事di Vue component itu"
+
+This prevents me from guessing wrong file/component.
