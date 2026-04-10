@@ -242,12 +242,13 @@ class PenjualanResource extends BaseResource
                             ->reorderable(false)
                             ->addActionLabel('Tambah Produk')
                             ->colStyles([
-                                'id_produk' => 'width: 30%;',
+                                'id_produk' => 'width: 27%;',
                                 'kondisi' => 'width: 12%;',
+                                'id_pembelian_item' => 'width: 16%;',
                                 'qty' => 'width: 8%;',
-                                'hpp' => 'width: 15%;',
-                                'harga_jual' => 'width: 15%;',
-                                'serials_count' => 'width: 15%;',
+                                'hpp' => 'width: 13%;',
+                                'harga_jual' => 'width: 13%;',
+                                'serials_count' => 'width: 13%;',
                             ])
                             ->childComponents([
                                 Select::make('id_produk')
@@ -270,7 +271,7 @@ class PenjualanResource extends BaseResource
                                                 ->all();
                                             foreach ($extras as $id => $label) {
                                                 if (! array_key_exists($id, $options)) {
-                                                    $extras[$id] = $label . ' (stok habis)';
+                                                    $extras[$id] = '<span>' . e($label) . '</span> <span style="color: red;">(stok habis)</span>';
                                                 }
                                             }
                                             $options = $options + $extras;
@@ -280,12 +281,14 @@ class PenjualanResource extends BaseResource
                                     })
                                     ->searchable()
                                     ->preload()
+                                    ->allowHtml()
                                     ->required()
                                     ->native(false)
                                     ->live()
                                     ->afterStateUpdated(function (Set $set, ?int $state, Get $get): void {
                                         $set('harga_jual', null);
                                         $set('kondisi', null);
+                                        $set('id_pembelian_item', null);
                                         $set('serials', []);
 
                                         if ($state) {
@@ -310,6 +313,18 @@ class PenjualanResource extends BaseResource
                                     ->nullable()
                                     ->live()
                                     ->afterStateUpdated(function (Set $set, ?string $state, Get $get): void {
+                                        $batchId = (int) ($get('id_pembelian_item') ?? 0);
+
+                                        if ($batchId > 0) {
+                                            $batch = PembelianItem::query()->find($batchId);
+
+                                            if ($batch && $batch->kondisi === $state) {
+                                                return;
+                                            }
+
+                                            $set('id_pembelian_item', null);
+                                        }
+
                                         $productId = (int) ($get('id_produk') ?? 0);
                                         if ($productId > 0) {
                                             // Get price and hpp for this condition
@@ -319,6 +334,35 @@ class PenjualanResource extends BaseResource
                                                 $set('hpp', $batch->hpp);
                                             }
                                         }
+                                    }),
+                                Select::make('id_pembelian_item')
+                                    ->label('Batch')
+                                    ->options(function (Get $get): array {
+                                        $productId = (int) ($get('id_produk') ?? 0);
+                                        $condition = $get('kondisi');
+
+                                        return self::getBatchOptions($productId, $condition);
+                                    })
+                                    ->native(false)
+                                    ->searchable()
+                                    ->preload()
+                                    ->reactive()
+                                    ->disabled(fn(Get $get): bool => ! $get('id_produk'))
+                                    ->placeholder('Pilih Batch')
+                                    ->afterStateUpdated(function (Set $set, ?int $state): void {
+                                        if (! $state) {
+                                            return;
+                                        }
+
+                                        $batch = PembelianItem::query()->find($state);
+
+                                        if (! $batch) {
+                                            return;
+                                        }
+
+                                        $set('harga_jual', $batch->harga_jual);
+                                        $set('hpp', $batch->hpp);
+                                        $set('kondisi', $batch->kondisi);
                                     }),
                                 TextInput::make('qty')
                                     ->label('Qty')
@@ -330,8 +374,9 @@ class PenjualanResource extends BaseResource
                                             return null;
                                         }
                                         $condition = $get('kondisi');
+                                        $batchId = (int) ($get('id_pembelian_item') ?? 0);
 
-                                        return self::getAvailableQty($productId, $condition) ?: null;
+                                        return self::getAvailableQty($productId, $condition, $batchId) ?: null;
                                     })
                                     ->required()
                                     ->live(onBlur: true)
@@ -341,7 +386,8 @@ class PenjualanResource extends BaseResource
                                             return '';
                                         }
                                         $condition = $get('kondisi');
-                                        $available = self::getAvailableQty($productId, $condition);
+                                        $batchId = (int) ($get('id_pembelian_item') ?? 0);
+                                        $available = self::getAvailableQty($productId, $condition, $batchId);
 
                                         return 'Stok: ' . number_format($available, 0, ',', '.');
                                     })
@@ -1487,7 +1533,7 @@ class PenjualanResource extends BaseResource
      * @param  int|null  $idProduk  ID produk yang ingin dicari batch-nya.
      * @return array Daftar batch dalam bentuk array, di mana kunci adalah ID PembelianItem dan nilai adalah teks deskripsi batch.
      */
-    public static function getBatchOptions(?int $productId): array
+    public static function getBatchOptions(?int $productId, ?string $condition = null): array
     {
         if (! $productId) {
             return [];
@@ -1499,12 +1545,13 @@ class PenjualanResource extends BaseResource
         $items = PembelianItem::query()
             ->where($productColumn, $productId)
             ->where($qtyColumn, '>', 0)
+            ->when($condition, fn($query) => $query->where('kondisi', $condition))
             ->with('pembelian')
-            ->orderBy($qtyColumn, 'desc')
+            ->orderBy('id_pembelian_item', 'asc') // Urutan masuk pertama (FIFO)
             ->get()
-            ->mapWithKeys(fn(PembelianItem $item) => [
-                $item->id_pembelian_item => self::formatBatchLabel($item, $qtyColumn),
-            ]);
+            ->mapWithKeys(function (PembelianItem $item, int $index) use ($qtyColumn) {
+                return [$item->id_pembelian_item => self::formatBatchLabel($item, $qtyColumn, $index)];
+            });
 
         return $items->all();
     }
@@ -1517,9 +1564,10 @@ class PenjualanResource extends BaseResource
      *
      * @param  \App\Models\PembelianItem|null  $item  Data item pembelian yang akan dibuat labelnya.
      * @param  string  $qtyColumn  Nama kolom di database yang menyimpan jumlah sisa stok.
+     * @param  int     $index      Urutan batch produk.
      * @return string|null Teks label batch yang sudah diformat, atau null jika item tidak ada.
      */
-    public static function formatBatchLabel(?PembelianItem $item, string $qtyColumn): ?string
+    public static function formatBatchLabel(?PembelianItem $item, string $qtyColumn, int $index = 0): ?string
     {
         if (! $item) {
             return null;
@@ -1527,7 +1575,7 @@ class PenjualanResource extends BaseResource
 
         // membuat label batch untuk item pembelian
         $labelParts = [
-            $item->pembelian?->no_po ? '#' . $item->pembelian->no_po : 'Batch ' . $item->getKey(),
+            $item->pembelian?->no_po ? '#' . $item->pembelian->no_po : 'Batch ' . ($index + 1),
             'Qty: ' . number_format((int) ($item->{$qtyColumn} ?? 0), 0, ',', '.'),
             'HPP: Rp ' . number_format((int) ($item->hpp ?? 0), 0, ',', '.'),
         ];
@@ -1548,11 +1596,37 @@ class PenjualanResource extends BaseResource
         $qtyColumn = PembelianItem::qtySisaColumn();
         $productColumn = PembelianItem::productForeignKey();
 
-        return Produk::query()
+        $products = Produk::query()
             ->whereHas('pembelianItems', fn(Builder $query) => $query->where($qtyColumn, '>', 0))
+            ->with(['pembelianItems' => function ($query) use ($qtyColumn) {
+                $query->where($qtyColumn, '>', 0)
+                    ->with(['pembelian', 'pembelian.supplier'])
+                    ->orderBy('id_pembelian_item', 'asc');
+            }])
             ->orderBy('nama_produk')
-            ->pluck('nama_produk', 'id')
-            ->all();
+            ->get();
+
+        $options = [];
+        foreach ($products as $produk) {
+            $namaProduk = $produk->nama_produk;
+            $batches = $produk->pembelianItems
+                ->values()
+                ->map(fn(PembelianItem $item, int $index) => self::formatBatchLabel($item, $qtyColumn, $index))
+                ->filter()
+                ->values();
+
+            $batchHtml = $batches->isEmpty()
+                ? '<span style="color: gray;">-</span>'
+                : '<span style="color: gray;">' . implode('<br>', array_map(fn(string $label) => e($label), $batches->all())) . '</span>';
+
+            $options[$produk->id] = sprintf(
+                '<span>%s</span><br>%s',
+                e($namaProduk),
+                $batchHtml
+            );
+        }
+
+        return $options;
     }
 
     /**
@@ -1612,7 +1686,7 @@ class PenjualanResource extends BaseResource
     /**
      * Get available stock quantity for a product.
      */
-    public static function getAvailableQty(int $productId, ?string $condition = null): int
+    public static function getAvailableQty(int $productId, ?string $condition = null, ?int $batchId = null): int
     {
         if ($productId < 1) {
             return 0;
@@ -1624,6 +1698,10 @@ class PenjualanResource extends BaseResource
         $query = PembelianItem::query()
             ->where($productColumn, $productId)
             ->where($qtyColumn, '>', 0);
+
+        if ($batchId) {
+            $query->whereKey($batchId);
+        }
 
         if ($condition) {
             $query->where('kondisi', $condition);

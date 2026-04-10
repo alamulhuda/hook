@@ -20,6 +20,7 @@ class PenjadwalanService extends Model
         'kelengkapan',
         'keluhan',
         'catatan_teknisi',
+        'images',
         'no_resi',
         'status',
         'technician_id',
@@ -30,6 +31,7 @@ class PenjadwalanService extends Model
 
     protected $casts = [
         'estimasi_selesai' => 'date',
+        'images' => 'array',
     ];
 
     public function member()

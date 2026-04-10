@@ -2,6 +2,42 @@
 
 Semua perubahan penting pada proyek ini direkonstruksi dari riwayat git. Pembuatan versi sekarang mengikuti sistem CalVer (`YYYY.MM.DD`) selama aplikasi masih dalam tahap pra-1.0. Entri disusun secara kronologis dengan perubahan terbaru berada di paling atas.
 
+## 2026.03.06
+### Perbaikan Validasi Form Pembelian (HPP & Harga Jual)
+
+#### 1. Fix False-Positive `required` pada Input Item Pembelian
+- **Kondisi Required Lebih Akurat**: Memperbarui rule `required` pada field `hpp` dan `harga_jual` di `PembelianResource` agar hanya wajib ketika produk sudah dipilih, nilai field masih kosong, dan histori harga terakhir produk memang belum tersedia (`null`).
+- **Sinkronisasi State Form**: Mengubah mode reaktif field dari `live(onBlur: true)` menjadi `live()` untuk mencegah keterlambatan sinkronisasi state yang bisa memicu validasi `required` secara keliru.
+- **Dampak**: Input pembelian untuk barang baru maupun barang existing kini tidak lagi menampilkan error `hpp required` saat nilai sudah diisi/tersedia.
+
+## 2026.03.10
+### Penjualan: Pemilihan Batch Manual
+
+#### 1. Dropdown Batch di Form Penjualan
+- **Pilih Batch Manual**: Menambahkan field `Batch` pada repeater item penjualan agar pengguna bisa memilih batch tertentu, bukan selalu FIFO batch pertama.
+- **Sinkronisasi Harga & Kondisi**: Saat batch dipilih, `hpp`, `harga`, dan `kondisi` otomatis mengikuti batch tersebut.
+- **Validasi Stok per Batch**: `Qty` sekarang divalidasi terhadap stok batch yang dipilih (atau total stok bila batch tidak dipilih).
+
+#### 2. Informasi Batch Lengkap di Selector Produk
+- **Tampilkan Semua Batch**: Dropdown produk menampilkan daftar batch aktif (PO/Batch, Qty, HPP) di bawah nama produk untuk mempermudah pemilihan batch.
+
+## 2026.02.19
+### Perbaikan Bug & Peningkatan UI Stok
+
+#### 1. Inventory & Stok
+- **Navigasi Batch (New)**: Menambahkan link pada "No. PO" di kartu batch (Infolist) inventory. Klik link akan membuka detail Pembelian di tab baru.
+- **Tooltip**: Menambahkan tooltip "Lihat Detail Pembelian" yang muncul saat kursor diarahkan ke No. PO tersebut.
+
+#### 2. Format Tampilan (UI Polish)
+- **Produk**: Nama produk kini diformat menjadi huruf kapital (*Uppercase*) di tabel Produk.
+- **Standarisasi Nama**: Mengubah format nama Member dan Supplier menjadi *Title Case* di Resource Penjualan, Pembelian, Tukar Tambah, dan Laporan.
+- **Format Mata Uang**: Menambahkan spasi standar pada format "Rp " di Resource Penjualan dan Tukar Tambah agar lebih mudah dibaca.
+
+#### 3. Maintenance & Code Cleanup
+- **Migration Fix**: Menghapus file migrasi duplikat (`2026_02_05...`) yang konflik dengan migrasi Soft Delete Pembelian sebelumnya.
+- **Model Fix**: Memperbaiki *duplicate import statements* (Model & SoftDeletes) pada `Pembelian.php`.
+- **Closure Formatting**: Melakukan *standardize formatting* pada closure di berbagai Resource (Penjualan, Tukar Tambah, Report) untuk konsistensi kode.
+
 ## 2026.02.05
 ### Konsistensi Filter & Perbaikan Keamanan Data
 
