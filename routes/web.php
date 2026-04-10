@@ -50,8 +50,7 @@ Route::get('/', function () {
 
 // Inertia App Routes
 Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
-    // Fallback login redirect (shouldn't be hit since auth middleware handles it)
-    Route::get('/login', fn() => redirect()->route('filament.admin.auth.login'));
+    // NOTE: /app/login is handled by inertia.php (no middleware)
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('app.dashboard');
     

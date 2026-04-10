@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\App\Auth\LoginController;
 use App\Http\Controllers\App\BrandController;
 use App\Http\Controllers\App\DashboardController;
 use App\Http\Controllers\App\PembelianController;
@@ -8,6 +9,14 @@ use App\Http\Controllers\App\ProdukController;
 use App\Http\Controllers\App\UserController;
 use Illuminate\Support\Facades\Route;
 
+// Auth routes (no middleware)
+Route::prefix('app')->group(function () {
+    Route::get('/login', [LoginController::class, 'show'])->name('app.login');
+    Route::post('/login', [LoginController::class, 'login'])->name('app.login.submit');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('app.logout');
+});
+
+// Protected routes
 Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('app.dashboard');
     

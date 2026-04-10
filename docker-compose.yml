@@ -15,6 +15,8 @@ services:
       - "8000:8000"
     networks:
       - arabica-network
+    depends_on:
+      - db
 
   # Service Web Server (Nginx)
   web:
@@ -36,12 +38,8 @@ services:
     image: mysql:8.0
     container_name: arabica-db
     restart: unless-stopped
-    profiles: ["local"] # Only start this service when using --profile local
     # Reduce memory usage for low-RAM servers
-    # Original command (SSL Enabled):
-    # command: --innodb-buffer-pool-size=128M --innodb-log-file-size=48M
-    # Command with SSL Disabled (Fixes "Self-signed certificate" import error):
-    command: --innodb-buffer-pool-size=128M --innodb-log-file-size=48M --tls-version=''
+    command: --innodb-buffer-pool-size=128M --innodb-redo-log-capacity=100663296
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -73,6 +71,7 @@ services:
       - arabica-network
     depends_on:
       - app
+      - db
 
 networks:
   arabica-network:
