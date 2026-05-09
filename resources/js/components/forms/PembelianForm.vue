@@ -324,14 +324,14 @@ onMounted(() => {
                     <div>
                         <div class="flex items-center justify-between mb-1">
                             <label class="text-sm text-muted-foreground">Supplier</label>
-                            <button
+                            <!-- <button
                                 type="button"
                                 class="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors"
                                 @click="openSupplierModal('')"
                             >
                                 <Plus class="h-3.5 w-3.5" />
                                 Add new
-                            </button>
+                            </button> -->
                         </div>
                         <RelationSelect
                             v-model="form.id_supplier"
