@@ -10,13 +10,13 @@
   <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
 
-# Exelsa Coffee Shop POS
+# Hook ERP Inventory hook
 
-![App Screenshot Placeholder](https://via.placeholder.com/1200x600.png?text=Dashboard+Screenshot+Here)
+![App Screenshot Placeholder](public/images/readme/dashboard.png)
 
 ## 📖 1. Application Description
 
-**Exelsa POS** is a modern, all-in-one Point of Sale (POS), Accounting, and Business Management system built specifically for coffee shops and retail businesses. Powered by Laravel, Filament, and Inertia.js (Vue 3), it provides a blazing fast, reactive user interface for daily operations.
+**Hook POS Inventory Software** is a modern, all-in-one Point of Sale (POS), Accounting, and Business Management system built specifically for coffee shops and retail businesses. Powered by Laravel, Filament, and Inertia.js (Vue 3), it provides a blazing fast, reactive user interface for daily operations.
 
 ### ✨ Key Features:
 - ☕ **POS Cashier** - Fast and seamless transactions.
