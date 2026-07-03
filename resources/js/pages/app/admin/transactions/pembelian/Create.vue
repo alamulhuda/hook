@@ -418,7 +418,14 @@ async function submitSupplierForm() {
                                         class="w-full"
                                     />
                                 </div>
-                                
+                            </div>
+                        </Card>
+
+                        <!-- Supplier Detail -->
+                        <Card class="p-6">
+                            <h3 class="font-semibold mb-4">Supplier Detail</h3>
+                            
+                            <div class="space-y-4">
                                 <div>
                                     <div class="flex items-center justify-between mb-1">
                                         <label class="text-sm text-muted-foreground">Supplier</label>
@@ -443,7 +450,7 @@ async function submitSupplierForm() {
                                         @create="openSupplierModal"
                                     />
                                 </div>
-                                
+
                                 <div>
                                     <label class="text-sm text-muted-foreground block mb-1">Nota Supplier</label>
                                     <Input
@@ -452,7 +459,7 @@ async function submitSupplierForm() {
                                         class="w-full"
                                     />
                                 </div>
-                                
+
                                 <div>
                                     <label class="text-sm text-muted-foreground block mb-1">Payment Type</label>
                                     <select
@@ -468,7 +475,7 @@ async function submitSupplierForm() {
                                         </option>
                                     </select>
                                 </div>
-                                
+
                                 <div v-if="form.jenis_pembayaran === 'tempo'">
                                     <label class="text-sm text-muted-foreground block mb-1">Due Date</label>
                                     <Input
