@@ -19,6 +19,8 @@ import {
     User,
 } from 'lucide-vue-next'
 import Button from '@/components/ui/button.vue'
+import Label from '../ui/label.vue'
+import { icon } from 'leaflet'
 
 interface NavItem {
     label: string
@@ -44,6 +46,7 @@ const mainNavigation = [
     { id: 'penjualan', label: 'Sales', icon: Package, href: '/app/admin/penjualan' },
     { id: 'pembelian', label: 'Purchase', icon: Package, href: '/app/admin/pembelian' },
     { id: 'inventory', label: 'Inventory', icon: Package },
+    { id: 'master-data', label: 'Master Data', icon: Package },
     { id: 'catalog', label: 'Catalog', icon: Package },
     { id: 'akunting', label: 'Akunting', icon: FileText },
     { id: 'finances', label: 'Finances', icon: FileText },
@@ -55,10 +58,10 @@ const subNavigation: Record<string, NavItem[]> = {
     'dashboard': [
         { label: 'Overview', icon: BarChart3, href: '/app/dashboard' },
     ],
-//    'master-data': [
-//        { label: 'Produk', icon: Package, href: '/app/admin/master-data/produk' }, // Penambahan produk akan dilebur ke inventory
-//        { label: 'Jasa', icon: Package, href: '/app/admin/master-data/jasa' }, // Jasa akan dilbeur sebagai produk ( produk fisik, jasa)
-//    ],
+    'master-data': [
+        { label: 'Produk', icon: Package, href: '/app/admin/master-data/produk' }, // Penambahan produk akan dilebur ke inventory
+        { label: 'Jasa', icon: Package, href: '/app/admin/master-data/jasa' }, // Jasa akan dilbeur sebagai produk ( produk fisik, jasa)
+    ],
     'penjualan': [
         { label: 'Sales Order', icon: ShoppingCart, href: '/app/admin/transactions/penjualan' },
         { label: 'Trade-In', icon: ShoppingCart, href: '/app/admin/transactions/tukar-tambah' },
