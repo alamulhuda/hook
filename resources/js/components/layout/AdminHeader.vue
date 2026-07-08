@@ -100,7 +100,8 @@ onUnmounted(() => {
             <Menu class="h-5 w-5" />
         </Button>
         
-        <div class="flex-1" />
+        <!-- Teleport target for PageHeader title & subtitle -->
+        <div id="admin-header-title" class="flex-1 flex items-center min-w-0 overflow-hidden" />
         
         <div class="flex items-center gap-1">
             <!-- Search Button + Dropdown -->
