@@ -87,12 +87,12 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
         Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('app.permissions.destroy');
         
         Route::prefix('master-data')->group(function () {
-            Route::get('/produk/search', [ProdukController::class, 'search'])->name('app.produk.search');
-            Route::get('/produk/{produk}', [ProdukController::class, 'show'])->name('app.produk.show');
-            Route::get('/produk', [ProdukController::class, 'index'])->name('app.produk');
-            Route::post('/produk', [ProdukController::class, 'store'])->name('app.produk.store');
-            Route::match(['put', 'post'], '/produk/{produk}', [ProdukController::class, 'update'])->name('app.produk.update');
-            Route::delete('/produk/{produk}', [ProdukController::class, 'destroy'])->name('app.produk.destroy');
+            Route::get('/product-data/search', [ProdukController::class, 'search'])->name('app.product-data.search');
+            Route::get('/product-data/{produk}', [ProdukController::class, 'show'])->name('app.product-data.show');
+            Route::get('/product-data', [ProdukController::class, 'index'])->name('app.product-data');
+            Route::post('/product-data', [ProdukController::class, 'store'])->name('app.product-data.store');
+            Route::match(['put', 'post'], '/product-data/{produk}', [ProdukController::class, 'update'])->name('app.product-data.update');
+            Route::delete('/product-data/{produk}', [ProdukController::class, 'destroy'])->name('app.product-data.destroy');
             
             Route::get('/brand', [BrandController::class, 'index'])->name('app.brand');
             Route::post('/brand', [BrandController::class, 'store'])->name('app.brand.store');

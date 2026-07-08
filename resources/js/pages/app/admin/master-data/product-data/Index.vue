@@ -85,7 +85,7 @@ let filterTimeout: ReturnType<typeof setTimeout> | null = null
 
 function applyFilters() {
     router.get(
-        '/app/admin/master-data/produk',
+        '/app/admin/master-data/product-data',
         {
             search: searchQuery.value || undefined,
             brand_id: selectedBrandFilter.value || undefined,
@@ -216,16 +216,16 @@ function submitForm() {
     }
 
     if (selectedProduct.value) {
-        form.post(`/app/admin/master-data/produk/${selectedProduct.value.id}?_method=PUT`, payload)
+        form.post(`/app/admin/master-data/product-data/${selectedProduct.value.id}?_method=PUT`, payload)
     } else {
-        form.post('/app/admin/master-data/produk', payload)
+        form.post('/app/admin/master-data/product-data', payload)
     }
 }
 
 function deleteProduct() {
     if (!selectedProduct.value) return
     isDeleting.value = true
-    form.delete(`/app/admin/master-data/produk/${selectedProduct.value.id}`, {
+    form.delete(`/app/admin/master-data/product-data/${selectedProduct.value.id}`, {
         onSuccess: () => {
             closeDeleteModal()
             isDeleting.value = false
@@ -244,7 +244,7 @@ function deleteProduct() {
                 title="Products Catalog"
                 description="Manage products, dimensions, stock SKUs, categories, brands, and media."
                 :breadcrumbs="[
-                    { label: 'Master Data', href: '/app/admin/master-data/produk' },
+                    { label: 'Master Data', href: '/app/admin/master-data/product-data' },
                     { label: 'Products' },
                 ]"
             >

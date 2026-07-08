@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
     placeholder: 'Search product...',
     searchPlaceholder: 'Search by name or SKU...',
     emptyMessage: 'No products found.',
-    endpoint: '/app/admin/master-data/produk/search',
+    endpoint: '/app/admin/master-data/product-data/search',
 })
 
 const emit = defineEmits<{

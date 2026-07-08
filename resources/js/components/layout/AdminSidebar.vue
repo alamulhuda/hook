@@ -59,7 +59,7 @@ const subNavigation: Record<string, NavItem[]> = {
         { label: 'Overview', icon: BarChart3, href: '/app/dashboard' },
     ],
     'master-data': [
-        { label: 'Produk', icon: Package, href: '/app/admin/master-data/produk' }, // Penambahan produk akan dilebur ke inventory
+        { label: 'Product Data', icon: Package, href: '/app/admin/master-data/product-data' }, // Penambahan produk akan dilebur ke inventory
         { label: 'Jasa', icon: Package, href: '/app/admin/master-data/jasa' }, // Jasa akan dilbeur sebagai produk ( produk fisik, jasa)
     ],
     'penjualan': [

@@ -38,7 +38,7 @@ class ProdukController extends Controller
         $brands = Brand::all();
         $kategoris = Kategori::all();
 
-        return Inertia::render('app/admin/master-data/produk/Index', [
+        return Inertia::render('app/admin/master-data/product-data/Index', [
             'produks' => $produks,
             'brands' => $brands,
             'kategoris' => $kategoris,

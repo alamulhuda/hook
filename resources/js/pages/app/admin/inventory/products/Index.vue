@@ -384,7 +384,7 @@ function submitForm() {
     if (selectedProduk.value) {
         // Send POST to ProdukController@update via master-data endpoint since that's where the logic handles images, etc.
         router.post(
-            `/app/admin/master-data/produk/${selectedProduk.value.id}`,
+            `/app/admin/master-data/product-data/${selectedProduk.value.id}`,
             formData,
             {
                 onSuccess: () => {
@@ -399,7 +399,7 @@ function submitForm() {
             }
         )
     } else {
-        router.post('/app/admin/master-data/produk', formData, {
+        router.post('/app/admin/master-data/product-data', formData, {
             onSuccess: () => {
                 showForm.value = false
                 form.reset()
@@ -415,7 +415,7 @@ function submitForm() {
 
 function deleteProduk() {
     if (selectedProduk.value) {
-        form.delete(`/app/admin/master-data/produk/${selectedProduk.value.id}`, {
+        form.delete(`/app/admin/master-data/product-data/${selectedProduk.value.id}`, {
             onSuccess: () => {
                 showDeleteModal.value = false
                 selectedProduk.value = null
