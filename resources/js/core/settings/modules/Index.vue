@@ -82,7 +82,7 @@ function openDetails(mod: ModuleItem) {
 function quickToggle(mod: ModuleItem, e: Event) {
     e.stopPropagation()
     isProcessing.value[mod.id] = true
-    router.post(`/settings/modules/${mod.id}/toggle`, {}, {
+    router.post(`/app/settings/modules/${mod.id}/toggle`, {}, {
         onSuccess: () => {
             isProcessing.value[mod.id] = false
             if (selectedModule.value?.id === mod.id) {

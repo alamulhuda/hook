@@ -60,7 +60,7 @@ function close() {
 function toggleModule() {
     if (!props.module) return
     isProcessing.value = true
-    router.post(`/settings/modules/${props.module.id}/toggle`, {}, {
+    router.post(`/app/settings/modules/${props.module.id}/toggle`, {}, {
         onSuccess: () => {
             isProcessing.value = false
         },
@@ -73,7 +73,7 @@ function toggleModule() {
 function updateModule() {
     if (!props.module) return
     isProcessing.value = true
-    router.post(`/settings/modules/${props.module.id}/update`, {}, {
+    router.post(`/app/settings/modules/${props.module.id}/update`, {}, {
         onSuccess: () => {
             isProcessing.value = false
         },
@@ -86,7 +86,7 @@ function updateModule() {
 function deleteModule() {
     if (!props.module) return
     isProcessing.value = true
-    router.delete(`/settings/modules/${props.module.id}`, {
+    router.delete(`/app/settings/modules/${props.module.id}`, {
         onSuccess: () => {
             isProcessing.value = false
             showDeleteConfirm.value = false

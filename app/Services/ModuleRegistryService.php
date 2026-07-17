@@ -38,20 +38,28 @@ class ModuleRegistryService
     }
 
     /**
+     * Helper to get normalized variation keys for a module name/id.
+     */
+    protected function getNormalizedKeys(string $nameOrId): array
+    {
+        $keys = [$nameOrId, strtolower($nameOrId)];
+        $kebab = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $nameOrId));
+        $keys[] = $kebab;
+        $keys[] = str_replace('-', '', strtolower($nameOrId));
+        return array_values(array_unique($keys));
+    }
+
+    /**
      * Check if a module is enabled by ID or directory name (case insensitive).
      */
     public function isModuleEnabled(string $moduleNameOrId): bool
     {
         $statuses = $this->getStatuses();
-        $key = strtolower($moduleNameOrId);
-
-        // Also check exact directory name matches if different
-        if (isset($statuses[$moduleNameOrId])) {
-            return (bool) $statuses[$moduleNameOrId];
-        }
-
-        if (isset($statuses[$key])) {
-            return (bool) $statuses[$key];
+        
+        foreach ($this->getNormalizedKeys($moduleNameOrId) as $key) {
+            if (isset($statuses[$key])) {
+                return (bool) $statuses[$key];
+            }
         }
 
         // Default to enabled if not explicitly disabled
@@ -64,7 +72,9 @@ class ModuleRegistryService
     public function enableModule(string $id): void
     {
         $statuses = $this->getStatuses();
-        $statuses[strtolower($id)] = true;
+        foreach ($this->getNormalizedKeys($id) as $key) {
+            $statuses[$key] = true;
+        }
         $this->saveStatuses($statuses);
     }
 
@@ -74,7 +84,9 @@ class ModuleRegistryService
     public function disableModule(string $id): void
     {
         $statuses = $this->getStatuses();
-        $statuses[strtolower($id)] = false;
+        foreach ($this->getNormalizedKeys($id) as $key) {
+            $statuses[$key] = false;
+        }
         $this->saveStatuses($statuses);
     }
 
@@ -114,14 +126,21 @@ class ModuleRegistryService
                 }
             }
 
-            $id = strtolower($manifest['id'] ?? $dir);
+            $id = $manifest['id'] ?? $dir;
             $enabled = true;
-            if (isset($statuses[$id])) {
-                $enabled = (bool) $statuses[$id];
-            } elseif (isset($statuses[$dir])) {
-                $enabled = (bool) $statuses[$dir];
-            } elseif (isset($statuses[strtolower($dir)])) {
-                $enabled = (bool) $statuses[strtolower($dir)];
+            foreach ($this->getNormalizedKeys($id) as $key) {
+                if (isset($statuses[$key])) {
+                    $enabled = (bool) $statuses[$key];
+                    break;
+                }
+            }
+            if ($enabled) {
+                foreach ($this->getNormalizedKeys($dir) as $key) {
+                    if (isset($statuses[$key])) {
+                        $enabled = (bool) $statuses[$key];
+                        break;
+                    }
+                }
             }
 
             $manifest['directory'] = $dir;
