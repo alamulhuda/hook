@@ -34,7 +34,7 @@ class StockAdjustmentController extends Controller
 
         $adjustments = $query->paginate(15)->withQueryString();
 
-        return Inertia::render('app/admin/inventory/stock-adjustment/Index', [
+        return Inertia::render('modules/inventory/pages/stock-adjustment/Index', [
             'adjustments' => $adjustments,
             'gudangs'     => Gudang::where('is_active', true)->orderBy('nama_gudang')->get(),
             'filters'     => $request->only(['search', 'status']),
@@ -43,7 +43,7 @@ class StockAdjustmentController extends Controller
 
     public function create()
     {
-        return Inertia::render('app/admin/inventory/stock-adjustment/Create', [
+        return Inertia::render('modules/inventory/pages/stock-adjustment/Create', [
             'gudangs' => Gudang::where('is_active', true)->orderBy('nama_gudang')->get(),
             'produks' => $this->getStockableProducts(),
         ]);
@@ -96,7 +96,7 @@ class StockAdjustmentController extends Controller
             'postedBy',
         ]);
 
-        return Inertia::render('app/admin/inventory/stock-adjustment/Show', [
+        return Inertia::render('modules/inventory/pages/stock-adjustment/Show', [
             'adjustment' => $stockAdjustment,
         ]);
     }
@@ -110,7 +110,7 @@ class StockAdjustmentController extends Controller
 
         $stockAdjustment->load(['items.produk', 'items.pembelianItem', 'gudang']);
 
-        return Inertia::render('app/admin/inventory/stock-adjustment/Edit', [
+        return Inertia::render('modules/inventory/pages/stock-adjustment/Edit', [
             'adjustment' => $stockAdjustment,
             'gudangs'    => Gudang::where('is_active', true)->orderBy('nama_gudang')->get(),
             'produks'    => $this->getStockableProducts(),

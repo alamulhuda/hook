@@ -12,7 +12,7 @@ class KategoriController extends Controller
     public function index()
     {
         $kategori = Kategori::all();
-        return Inertia::render('app/admin/master-data/kategori/Index', [
+        return Inertia::render('core/admin/master-data/kategori/Index', [
             'kategori' => $kategori,
             'user' => auth()->user(),
         ]);

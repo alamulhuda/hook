@@ -45,11 +45,11 @@ Route::get('/login', fn() => redirect()->route('filament.admin.auth.login'))->na
 
 // TEMP TEST ROUTE - REMOVE LATER
 Route::get('/test-inertia', function () {
-    return Inertia::render('app/dashboard', ['test' => 'hello from inertia']);
+    return Inertia::render('core/dashboard', ['test' => 'hello from inertia']);
 });
 
 Route::get('/test-minimal', function () {
-    return Inertia::render('app/minimal-test', ['test' => 'minimal test']);
+    return Inertia::render('core/minimal-test', ['test' => 'minimal test']);
 });
 
 Route::get('/', function () {
@@ -138,7 +138,7 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
     // Akunting routes moved to Modules\Akunting (app/Modules/Akunting/routes.php)
     // URL prefix: /app/modules/akunting/
 
-    Route::get('/settings', function () { return Inertia::render('app/settings/Index'); })->name('app.settings');
+    Route::get('/settings', function () { return Inertia::render('core/settings/Index'); })->name('app.settings');
 });
 
 // POS receipt preview/print

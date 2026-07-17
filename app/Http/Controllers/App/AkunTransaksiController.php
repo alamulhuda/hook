@@ -13,7 +13,7 @@ class AkunTransaksiController extends Controller
     public function index()
     {
         $akunTransaksi = AkunTransaksi::all();
-        return Inertia::render('app/admin/master-data/akun-transaksi/Index', [
+        return Inertia::render('modules/akunting/pages/master-data/akun-transaksi/Index', [
             'akunTransaksi' => $akunTransaksi,
             'user' => auth()->user(),
         ]);

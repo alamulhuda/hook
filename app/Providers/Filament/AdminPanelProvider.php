@@ -865,7 +865,6 @@ class AdminPanelProvider extends PanelProvider
                 HTML
             );
         
-        \Illuminate\Support\Facades\Log::info("Admin panel resources count: " . count($panel->getResources()));
         return $panel;
     }
 }

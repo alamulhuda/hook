@@ -12,7 +12,7 @@ class JasaController extends Controller
     public function index()
     {
         $jasa = Jasa::all();
-        return Inertia::render('app/admin/master-data/jasa/Index', [
+        return Inertia::render('modules/service-repair/pages/master-data/jasa/Index', [
             'jasa' => $jasa,
             'user' => auth()->user(),
         ]);

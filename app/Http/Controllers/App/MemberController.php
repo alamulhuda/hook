@@ -25,7 +25,7 @@ class MemberController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return Inertia::render('app/admin/master-data/member/Index', [
+        return Inertia::render('core/admin/master-data/member/Index', [
             'members' => $members,
             'filters' => $request->only(['search']),
         ]);

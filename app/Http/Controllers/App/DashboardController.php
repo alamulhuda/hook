@@ -35,41 +35,8 @@ class DashboardController extends Controller
         $totalProducts = Produk::count() ?? 0;
         $totalCustomers = Member::count() ?? 0;
 
-        // Recent Sales (last 5) - also filtered by date if set
-        $recentSalesQuery = Penjualan::with('member')
-            ->where('status_pembayaran', 'lunas');
-        
-        if ($dateFrom && $dateTo) {
-            $recentSalesQuery->whereBetween('tanggal_penjualan', [$dateFrom, $dateTo]);
-        }
-
-        $recentSales = $recentSalesQuery
-            ->orderBy('tanggal_penjualan', 'desc')
-            ->limit(5)
-            ->get()
-            ->map(fn ($sale) => [
-                'id' => $sale->id,
-                'customer' => $sale->member->nama_member ?? 'Guest',
-                'product' => $sale->no_nota ?? 'Transaksi #' . $sale->id,
-                'amount' => 'Rp ' . number_format($sale->grand_total, 0, ',', '.'),
-                'date' => $sale->tanggal_penjualan->format('Y-m-d'),
-            ]);
-
-        // Low Stock Items - get from StockOpname latest data
-        // Stock is managed via StockOpname/StockAdjustment, not direct on Produk
-        // For now, show recent products as placeholder
-        $lowStockItems = Produk::orderBy('id', 'desc')
-            ->limit(5)
-            ->get()
-            ->map(fn ($item) => [
-                'id' => $item->id,
-                'name' => $item->nama_produk,
-                'sku' => $item->sku ?? '-',
-                'stock' => 'N/A',
-                'min' => 'N/A',
-            ]);
-
         // Calculate trends (compare with last month)
+        // Note: recentSales and lowStockItems are now fetched by their own module widgets
         $currentMonthRevenue = Penjualan::where('status_pembayaran', 'lunas')
             ->whereMonth('tanggal_penjualan', now()->month)
             ->whereYear('tanggal_penjualan', now()->year)
@@ -129,11 +96,9 @@ class DashboardController extends Controller
             ],
         ];
 
-        return Inertia::render('app/dashboard', [
-            'user' => auth()->user(),
+        return Inertia::render('core/dashboard', [
+            'user'  => auth()->user(),
             'stats' => $stats,
-            'recentSales' => $recentSales,
-            'lowStockItems' => $lowStockItems,
         ]);
     }
 }

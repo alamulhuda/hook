@@ -34,7 +34,7 @@ class StockOpnameController extends Controller
 
         $opnames = $query->paginate(15)->withQueryString();
 
-        return Inertia::render('app/admin/inventory/stock-opname/Index', [
+        return Inertia::render('modules/inventory/pages/stock-opname/Index', [
             'opnames'  => $opnames,
             'gudangs'  => Gudang::where('is_active', true)->orderBy('nama_gudang')->get(),
             'filters'  => $request->only(['search', 'status']),
@@ -43,7 +43,7 @@ class StockOpnameController extends Controller
 
     public function create()
     {
-        return Inertia::render('app/admin/inventory/stock-opname/Create', [
+        return Inertia::render('modules/inventory/pages/stock-opname/Create', [
             'gudangs' => Gudang::where('is_active', true)->orderBy('nama_gudang')->get(),
             'produks' => $this->getAllProductBatches(),
         ]);
@@ -106,7 +106,7 @@ class StockOpnameController extends Controller
             'postedBy',
         ]);
 
-        return Inertia::render('app/admin/inventory/stock-opname/Show', [
+        return Inertia::render('modules/inventory/pages/stock-opname/Show', [
             'opname' => $stockOpname,
         ]);
     }
@@ -120,7 +120,7 @@ class StockOpnameController extends Controller
 
         $stockOpname->load(['items.produk', 'items.pembelianItem', 'gudang']);
 
-        return Inertia::render('app/admin/inventory/stock-opname/Edit', [
+        return Inertia::render('modules/inventory/pages/stock-opname/Edit', [
             'opname'  => $stockOpname,
             'gudangs' => Gudang::where('is_active', true)->orderBy('nama_gudang')->get(),
             'produks' => $this->getAllProductBatches(),

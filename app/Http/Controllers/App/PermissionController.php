@@ -11,7 +11,7 @@ class PermissionController extends Controller
 {
     public function index()
     {
-        return Inertia::render('app/admin/permissions/Index', [
+        return Inertia::render('core/admin/permissions/Index', [
             'permissions' => Permission::query()
                 ->withCount('roles')
                 ->orderBy('name')

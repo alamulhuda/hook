@@ -106,7 +106,7 @@ class InventoryProductController extends Controller
         $perPage  = in_array((int) $request->per_page, [10, 25, 50, 100]) ? (int) $request->per_page : 10;
         $products = $query->orderBy('nama_produk')->paginate($perPage)->withQueryString();
 
-        return Inertia::render('app/admin/inventory/products/Index', [
+        return Inertia::render('core/admin/inventory/products/Index', [
             'products'  => $products,
             'brands'    => Brand::orderBy('nama_brand')->get(['id', 'nama_brand']),
             'kategoris' => Kategori::orderBy('nama_kategori')->get(['id', 'nama_kategori']),

@@ -56,7 +56,7 @@ class PembelianController extends Controller
             'total_nilai' => Pembelian::sum('total_amount') ?? 0,
         ];
 
-        return Inertia::render('app/admin/transactions/pembelian/Index', [
+        return Inertia::render('core/admin/transactions/pembelian/Index', [
             'pembelians' => $pembelians,
             'stats' => $stats,
             'filters' => $request->only(['from', 'to', 'status', 'search']),
@@ -88,7 +88,7 @@ class PembelianController extends Controller
             ->orderBy('nama_akun')
             ->get(['id', 'kode_akun', 'nama_akun', 'jenis']);
 
-        return Inertia::render('app/admin/transactions/pembelian/Create', [
+        return Inertia::render('core/admin/transactions/pembelian/Create', [
             'suppliers' => $suppliers,
             'karyawans' => $karyawans,
             'produks' => $produks,
@@ -167,7 +167,7 @@ class PembelianController extends Controller
             'karyawan',
         ]);
 
-        return Inertia::render('app/admin/transactions/pembelian/Show', [
+        return Inertia::render('core/admin/transactions/pembelian/Show', [
             'pembelian' => $pembelian,
         ]);
     }
@@ -190,7 +190,7 @@ class PembelianController extends Controller
             ->orderBy('nama_akun')
             ->get(['id', 'kode_akun', 'nama_akun', 'jenis']);
 
-        return Inertia::render('app/admin/transactions/pembelian/Edit', [
+        return Inertia::render('core/admin/transactions/pembelian/Edit', [
             'pembelian' => $pembelian,
             'suppliers' => $suppliers,
             'karyawans' => $karyawans,

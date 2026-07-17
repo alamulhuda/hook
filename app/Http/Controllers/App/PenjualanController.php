@@ -55,7 +55,7 @@ class PenjualanController extends Controller
             'total_revenue' => Penjualan::where('status_pembayaran', 'lunas')->sum('grand_total'),
         ];
 
-        return Inertia::render('app/admin/transactions/penjualan/Index', [
+        return Inertia::render('core/admin/transactions/penjualan/Index', [
             'penjualans' => $penjualans,
             'stats' => $stats,
             'filters' => $request->only(['from', 'to', 'status', 'search']),
@@ -93,7 +93,7 @@ class PenjualanController extends Controller
             ->orderBy('nama_akun')
             ->get(['id', 'kode_akun', 'nama_akun', 'jenis']);
 
-        return Inertia::render('app/admin/transactions/penjualan/Create', [
+        return Inertia::render('core/admin/transactions/penjualan/Create', [
             'members' => $members,
             'karyawans' => $karyawans,
             'gudangs' => $gudangs,
@@ -211,7 +211,7 @@ class PenjualanController extends Controller
             'gudang',
         ]);
 
-        return Inertia::render('app/admin/transactions/penjualan/Show', [
+        return Inertia::render('core/admin/transactions/penjualan/Show', [
             'penjualan' => $penjualan,
         ]);
     }
@@ -236,7 +236,7 @@ class PenjualanController extends Controller
             ->orderBy('nama_produk')
             ->get(['id', 'nama_produk', 'sku']);
 
-        return Inertia::render('app/admin/transactions/penjualan/Edit', [
+        return Inertia::render('core/admin/transactions/penjualan/Edit', [
             'penjualan' => $penjualan,
             'members' => $members,
             'karyawans' => $karyawans,

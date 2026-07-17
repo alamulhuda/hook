@@ -12,7 +12,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        return Inertia::render('app/admin/roles/Index', [
+        return Inertia::render('core/admin/roles/Index', [
             'roles' => Role::query()
                 ->withCount('permissions')
                 ->withCount('users')
@@ -46,7 +46,7 @@ class RoleController extends Controller
             })
             ->values();
 
-        return Inertia::render('app/admin/roles/Edit', [
+        return Inertia::render('core/admin/roles/Edit', [
             'role' => [
                 'id' => $role->id,
                 'name' => $role->name,

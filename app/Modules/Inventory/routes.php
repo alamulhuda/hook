@@ -2,6 +2,7 @@
 
 use App\Modules\Inventory\Http\Controllers\StockAdjustmentController;
 use App\Modules\Inventory\Http\Controllers\StockOpnameController;
+use App\Modules\Inventory\Http\Controllers\LowStockWidgetController;
 use Illuminate\Support\Facades\Route;
 
 // Inventory module routes
@@ -26,3 +27,7 @@ Route::delete('/stock-opname/{stockOpname}', [StockOpnameController::class, 'des
 Route::post('/stock-opname/{stockOpname}/post', [StockOpnameController::class, 'post'])->name('modules.inventory.stock-opname.post');
 Route::get('/stock-opname/{stockOpname}', [StockOpnameController::class, 'show'])->name('modules.inventory.stock-opname.show');
 Route::get('/stock-opname', [StockOpnameController::class, 'index'])->name('modules.inventory.stock-opname');
+
+// Dashboard widget API — fetched independently by LowStockWidget.vue
+Route::get('/widgets/low-stock', LowStockWidgetController::class)->name('modules.inventory.widgets.low-stock');
+

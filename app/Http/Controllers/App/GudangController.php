@@ -12,7 +12,7 @@ class GudangController extends Controller
     public function index()
     {
         $gudang = Gudang::all();
-        return Inertia::render('app/admin/master-data/gudang/Index', [
+        return Inertia::render('modules/inventory/pages/master-data/gudang/Index', [
             'gudang' => $gudang,
             'user' => auth()->user(),
         ]);

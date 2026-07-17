@@ -12,7 +12,7 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::all();
-        return Inertia::render('app/admin/master-data/brand/Index', [
+        return Inertia::render('core/admin/master-data/brand/Index', [
             'brands' => $brands,
             'user' => auth()->user(),
         ]);

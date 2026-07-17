@@ -23,7 +23,7 @@ class UserController extends Controller
             ];
         })->values()->all();
         
-        return Inertia::render('app/admin/users/Index', [
+        return Inertia::render('core/admin/users/Index', [
             'users' => $items,
             'user' => auth()->user(),
         ]);

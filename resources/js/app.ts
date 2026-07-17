@@ -8,14 +8,23 @@ import '../css/inertia.css'
 
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 
-const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue')
+// Core MVP pages
+const corePages = import.meta.glob<DefineComponent>('./core/**/*.vue')
+// Non-MVP module pages (each module owns its own pages/ subfolder)
+const modulePages = import.meta.glob<DefineComponent>('./modules/**/pages/**/*.vue')
+
+const allPages = { ...corePages, ...modulePages }
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel'
 
 createInertiaApp({
     title: (title) => title ? `${title} - ${appName}` : appName,
     resolve: async (name) => {
-        const module = await resolvePageComponent(`./pages/${name}.vue`, pages)
+        // Inertia name from controller is e.g.:
+        //   "core/dashboard"
+        //   "core/admin/users/Index"
+        //   "modules/akunting/pages/input-transaksi/Index"
+        const module = await resolvePageComponent(`./${name}.vue`, allPages)
         const page = (module as any).default || module
         if (!page.layout) {
             page.layout = AppLayout

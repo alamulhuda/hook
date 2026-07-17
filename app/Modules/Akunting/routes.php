@@ -7,17 +7,17 @@ use Inertia\Inertia;
 // Prefixed /app/modules/akunting by BaseModuleServiceProvider
 
 Route::get('/chart-of-accounts', function () {
-    return Inertia::render('modules/akunting/chart-of-accounts/Index');
+    return Inertia::render('modules/akunting/pages/chart-of-accounts/Index');
 })->name('modules.akunting.chart-of-accounts');
 
 Route::get('/input-transaksi', function () {
-    return Inertia::render('modules/akunting/input-transaksi/Index');
+    return Inertia::render('modules/akunting/pages/input-transaksi/Index');
 })->name('modules.akunting.input-transaksi');
 
 Route::get('/laporan-laba-rugi', function () {
-    return Inertia::render('modules/akunting/laporan-laba-rugi/Index');
+    return Inertia::render('modules/akunting/pages/laporan-laba-rugi/Index');
 })->name('modules.akunting.laporan-laba-rugi');
 
 Route::get('/laporan-neraca', function () {
-    return Inertia::render('modules/akunting/laporan-neraca/Index');
+    return Inertia::render('modules/akunting/pages/laporan-neraca/Index');
 })->name('modules.akunting.laporan-neraca');

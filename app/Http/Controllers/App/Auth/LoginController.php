@@ -14,7 +14,7 @@ class LoginController extends Controller
      */
     public function show()
     {
-        return Inertia::render('app/auth/Login');
+        return Inertia::render('core/auth/Login');
     }
 
     /**
