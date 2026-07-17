@@ -72,7 +72,7 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
 
         if ($routesFile && file_exists($routesFile)) {
             Route::middleware(['web', 'auth'])
-                ->prefix('app/modules/' . $this->moduleName())
+                ->prefix('app/modules/' . strtolower($this->moduleName()))
                 ->group($routesFile);
         }
     }
