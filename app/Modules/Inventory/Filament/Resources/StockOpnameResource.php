@@ -4,7 +4,8 @@ namespace App\Modules\Inventory\Filament\Resources;
 
 use App\Modules\Inventory\Filament\Resources\StockOpnameResource\Pages;
 use App\Modules\Inventory\Filament\Resources\StockOpnameResource\RelationManagers\ItemsRelationManager;
-use App\Filament\Resources\BaseResource;use App\Models\StockOpname;
+use App\Filament\Resources\BaseResource;
+use App\Models\StockOpname;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;

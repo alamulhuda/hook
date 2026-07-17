@@ -1,5 +1,5 @@
 @php
-    $bulananUrl = \App\Filament\Resources\Akunting\LaporanLabaRugiResource::getUrl('index');
+    $bulananUrl = \App\Modules\Akunting\Filament\Resources\LaporanLabaRugiResource::getUrl('index');
     $detailUrl = \App\Filament\Pages\LabaRugiCustom::getUrl();
     $currentUrl = url()->current();
 @endphp

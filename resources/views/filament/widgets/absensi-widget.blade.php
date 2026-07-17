@@ -86,7 +86,7 @@
                     @if (!$currentAbsensi)
                         <x-filament::button
                             tag="a"
-                            href="{{ \App\Filament\Resources\Absensi\AbsensiResource::getUrl('create') }}"
+                            href="{{ \App\Modules\HR\Filament\Resources\Absensi\AbsensiResource::getUrl('create') }}"
                             color="primary"
                             size="lg"
                             icon="heroicon-m-play"

@@ -86,32 +86,8 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
      */
     protected function registerFilamentResources(): void
     {
-        $explicit = $this->resources();
-        $moduleDir = $this->moduleDirectory();
-
-        Filament::serving(function () use ($explicit, $moduleDir) {
-            $panel = Filament::getCurrentPanel();
-            if (! $panel) {
-                return;
-            }
-
-            // Option A: explicitly listed resource classes
-            if (! empty($explicit)) {
-                $panel->resources($explicit);
-                return;
-            }
-
-            // Option B: auto-discover from Modules/{Name}/Filament/Resources/
-            $resourcesPath = $moduleDir . '/Filament/Resources';
-            $namespace     = $this->moduleNamespace() . '\\Filament\\Resources';
-
-            if (is_dir($resourcesPath)) {
-                $panel->discoverResources(
-                    in: $resourcesPath,
-                    for: $namespace,
-                );
-            }
-        });
+        // Resources are now auto-discovered directly by AdminPanelProvider
+        // during panel configuration, ensuring routes are properly generated.
     }
 
     /**

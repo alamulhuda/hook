@@ -26,7 +26,7 @@
         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
             @forelse ($rows as $row)
                 @php
-                    $url = \App\Filament\Resources\Akunting\InputTransaksiTokoResource::getUrl('view', ['record' => $row]);
+                    $url = \App\Modules\Akunting\Filament\Resources\InputTransaksiTokoResource::getUrl('view', ['record' => $row]);
                 @endphp
                 <tr
                     class="lr-row group cursor-pointer border-b border-gray-200 transition bg-white dark:border-gray-700 dark:bg-transparent hover:bg-gray-100 hover:[&>td]:bg-gray-100"

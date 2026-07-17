@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use App\Filament\Resources\BaseResource;
 
 class NotificationResource extends BaseResource
 {

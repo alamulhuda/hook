@@ -3,7 +3,8 @@
 namespace App\Modules\Inventory\Filament\Resources;
 
 use App\Modules\Inventory\Filament\Resources\StockAdjustmentResource\Pages;
-use App\Filament\Resources\BaseResource;use App\Models\StockAdjustment;
+use App\Filament\Resources\BaseResource;
+use App\Models\StockAdjustment;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;

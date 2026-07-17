@@ -47,10 +47,10 @@
         {{-- Show Kode Akun list when tab matches --}}
         @if ($activeTab === 'kode_akun')
             {{-- Livewire component for Kode Akun list --}}
-            @livewire(\App\Filament\Resources\Akunting\KodeAkunResource\Pages\ListKodeAkuns::class)
+            @livewire(\App\Modules\Akunting\Filament\Resources\KodeAkunResource\Pages\ListKodeAkuns::class)
         @else
             {{-- Livewire component for Jenis Akun list --}}
-            @livewire(\App\Filament\Resources\Akunting\JenisAkunResource\Pages\ListJenisAkun::class)
+            @livewire(\App\Modules\Akunting\Filament\Resources\JenisAkunResource\Pages\ListJenisAkun::class)
         @endif
     </div>
 </x-filament-panels::page>
