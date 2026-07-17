@@ -44,6 +44,17 @@ provide('toggleMobileMenu', () => {
     isMobileMenuOpen.value = !isMobileMenuOpen.value
 })
 
+function isModuleActive(moduleKey?: string): boolean {
+    if (!moduleKey) return true
+    const enabled = page.props.enabled_modules as string[] | undefined
+    if (!enabled || !Array.isArray(enabled)) return true
+    const target = moduleKey.toLowerCase()
+    return enabled.some(e => {
+        const eLower = e.toLowerCase()
+        return eLower === target || eLower.replace(/-/g, '') === target.replace(/-/g, '')
+    })
+}
+
 const mainNavigation = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/app/dashboard' },
     { id: 'penjualan', label: 'Sales', icon: Package, href: '/app/admin/penjualan' },
@@ -51,7 +62,7 @@ const mainNavigation = [
     { id: 'inventory', label: 'Inventory', icon: Package },
     { id: 'master-data', label: 'Master Data', icon: Package },
     { id: 'catalog', label: 'Catalog', icon: Package },
-    { id: 'akunting', label: 'Akunting', icon: FileText },
+    { id: 'akunting', label: 'Akunting', icon: FileText, module: 'akunting' },
     { id: 'finances', label: 'Finances', icon: FileText },
     { id: 'user-management', label: 'User Management', icon: Users },
     { id: 'settings', label: 'Settings', icon: Settings },
@@ -62,12 +73,12 @@ const subNavigation: Record<string, NavItem[]> = {
         { label: 'Overview', icon: BarChart3, href: '/app/dashboard' },
     ],
     'master-data': [
-        { label: 'Product Data', icon: Package, href: '/app/admin/master-data/product-data' }, // Penambahan produk akan dilebur ke inventory
-        { label: 'Jasa', icon: Package, href: '/app/admin/master-data/jasa' }, // Jasa akan dilbeur sebagai produk ( produk fisik, jasa)
+        { label: 'Product Data', icon: Package, href: '/app/admin/master-data/product-data' },
+        { label: 'Jasa', icon: Package, href: '/app/admin/master-data/jasa' },
     ],
     'penjualan': [
-        { label: 'Sales Order', icon: ShoppingCart, href: '/app/admin/transactions/penjualan' },
-        { label: 'Trade-In', icon: ShoppingCart, href: '/app/admin/transactions/tukar-tambah' },
+        { label: 'Sales Order', icon: ShoppingCart, href: '/app/admin/transactions/penjualan', module: 'sales' },
+        { label: 'Trade-In', icon: ShoppingCart, href: '/app/admin/transactions/tukar-tambah', module: 'tukar-tambah' },
         { label: 'Customer', icon: Users, href: '/app/admin/master-data/member' },
         { label: 'Sales Return', icon: Users, href: '#' },
     ],
@@ -81,18 +92,18 @@ const subNavigation: Record<string, NavItem[]> = {
         { label: 'Brand', icon: Package, href: '/app/admin/master-data/brand' },
         { label: 'Kategori', icon: Package, href: '/app/admin/master-data/kategori' },
         { label: 'Warehouse', icon: Package, href: '/app/admin/master-data/gudang' },
-        { label: 'Stock Adjustment', icon: Package, href: '/app/admin/inventory/stock-adjustment' },
-        { label: 'Stock Opname', icon: Package, href: '/app/admin/inventory/stock-opname' },
-        { label: 'Stock Movement', icon: Package, href: '#' },
+        { label: 'Stock Adjustment', icon: Package, href: '/app/modules/inventory/stock-adjustment', module: 'inventory' },
+        { label: 'Stock Opname', icon: Package, href: '/app/modules/inventory/stock-opname', module: 'inventory' },
+        { label: 'Stock Movement', icon: Package, href: '#', module: 'inventory' },
     ],
     'akunting': [
-        { label: 'Chart of Accounts', icon: FileText, href: '/app/akunting/chart-of-accounts' },
-        { label: 'Journal Entries', icon: FileText, href: '/app/akunting/input-transaksi' },
-        { label: 'Profit & Loss', icon: BarChart3, href: '/app/akunting/laporan-laba-rugi' },
-        { label: 'Balance Sheet', icon: BarChart3, href: '#' },
-        { label: 'Cash & Bank', icon: FileText, href: '#' },
-        { label: 'Expenses', icon: FileText, href: '#' },
-        { label: 'Laporan Neraca', icon: BarChart3, href: '/app/akunting/laporan-neraca' },
+        { label: 'Chart of Accounts', icon: FileText, href: '/app/modules/akunting/chart-of-accounts', module: 'akunting' },
+        { label: 'Journal Entries', icon: FileText, href: '/app/modules/akunting/input-transaksi', module: 'akunting' },
+        { label: 'Profit & Loss', icon: BarChart3, href: '/app/modules/akunting/laporan-laba-rugi', module: 'akunting' },
+        { label: 'Balance Sheet', icon: BarChart3, href: '#', module: 'akunting' },
+        { label: 'Cash & Bank', icon: FileText, href: '#', module: 'akunting' },
+        { label: 'Expenses', icon: FileText, href: '#', module: 'akunting' },
+        { label: 'Laporan Neraca', icon: BarChart3, href: '/app/modules/akunting/laporan-neraca', module: 'akunting' },
     ],
     'finances': [
         { label: 'Invoices', icon: FileText, href: '#' },
@@ -114,7 +125,6 @@ const subNavigation: Record<string, NavItem[]> = {
 }
 
 function getActiveSectionFromPath(path: string): string {
-    // First, check if the exact path or a subpath matches any item in subNavigation
     for (const [section, items] of Object.entries(subNavigation)) {
         for (const item of items) {
             if (item.href && (path === item.href || path.startsWith(item.href + '/'))) {
@@ -123,9 +133,8 @@ function getActiveSectionFromPath(path: string): string {
         }
     }
     
-    // Fallbacks if not found explicitly in subNavigation
     if (path.includes('/master-data')) return 'master-data'
-    if (path.includes('/transactions')) return 'transactions'
+    if (path.includes('/transactions')) return 'penjualan'
     if (path.includes('/inventory')) return 'inventory'
     if (path.includes('/akunting')) return 'akunting'
     if (path.includes('/settings') || path.includes('/users')) return 'settings'
@@ -134,17 +143,46 @@ function getActiveSectionFromPath(path: string): string {
 
 const activeMainNav = ref(getActiveSectionFromPath(window.location.pathname))
 
-const activeSubNavItems = computed(() => {
-    const section = activeMainNav.value
-    const staticItems = subNavigation[section] || []
-    
-    // Check dynamic module navigation items
+const filteredMainNavigation = computed(() => {
     const enabled = page.props.enabled_modules as string[] | undefined
     const dynamicGroups = getModuleNavItems(enabled)
     
-    // Match dynamic groups to current section
+    // Check which static items should remain
+    const staticFiltered = mainNavigation.filter(item => {
+        if (item.module && !isModuleActive(item.module)) return false
+        // If all sub-navigation items for this main nav are disabled, check if it has a direct href
+        const subItems = subNavigation[item.id] || []
+        const activeSubs = subItems.filter(sub => isModuleActive(sub.module))
+        if (subItems.length > 0 && activeSubs.length === 0 && !item.href) {
+            return false
+        }
+        return true
+    })
+
+    // Dynamically append extra main groups from modules that are not already in static mainNavigation
+    const existingIds = new Set(staticFiltered.map(i => i.id.toLowerCase()))
+    const dynamicMain = dynamicGroups
+        .filter(g => !existingIds.has(g.label.toLowerCase()) && !['master-data', 'service-repair'].some(k => g.label.toLowerCase().includes(k)))
+        .map(g => ({
+            id: g.label.toLowerCase().replace(/\s+/g, '-'),
+            label: g.label,
+            icon: Package,
+            module: g.label.toLowerCase()
+        }))
+
+    return [...staticFiltered, ...dynamicMain]
+})
+
+const activeSubNavItems = computed(() => {
+    const section = activeMainNav.value
+    const staticItems = (subNavigation[section] || []).filter(item => isModuleActive(item.module))
+    
+    const enabled = page.props.enabled_modules as string[] | undefined
+    const dynamicGroups = getModuleNavItems(enabled)
+    
     const matchingGroups = dynamicGroups.filter(g => 
         g.label.toLowerCase() === section.toLowerCase() ||
+        g.label.toLowerCase().replace(/\s+/g, '-') === section.toLowerCase() ||
         (section === 'service-repair' && g.label.toLowerCase().includes('service')) ||
         (section === 'master-data' && g.label.toLowerCase().includes('master'))
     )
@@ -162,7 +200,6 @@ const activeSubNavItems = computed(() => {
 
 onMounted(() => {
     router.on('navigate', (event) => {
-        // use event.detail.page.url which might be just pathname or include query params. We want pathname.
         const url = new URL(event.detail.page.url, window.location.origin)
         activeMainNav.value = getActiveSectionFromPath(url.pathname)
     })
@@ -198,7 +235,7 @@ function isActiveHref(href?: string): boolean {
             <nav class="flex-1 py-4 overflow-y-auto">
                 <div class="space-y-1 px-2">
                     <button
-                        v-for="item in mainNavigation"
+                        v-for="item in filteredMainNavigation"
                         :key="item.id"
                         class="w-full flex flex-col items-center justify-center py-3 rounded-lg transition-colors relative group"
                         :class="[
@@ -243,7 +280,7 @@ function isActiveHref(href?: string): boolean {
         >
             <div class="h-16 flex items-center px-4 border-b">
                 <span class="text-sm font-semibold">
-                    {{ mainNavigation.find(m => m.id === activeMainNav)?.label }}
+                    {{ filteredMainNavigation.find(m => m.id === activeMainNav)?.label }}
                 </span>
             </div>
             

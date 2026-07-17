@@ -59,6 +59,10 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (!app(\App\Services\ModuleRegistryService::class)->isModuleEnabled($this->moduleName())) {
+            return;
+        }
+
         $this->registerRoutes();
         $this->registerFilamentResources();
     }
@@ -71,7 +75,11 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
         $routesFile = $this->routesFile();
 
         if ($routesFile && file_exists($routesFile)) {
-            Route::middleware(['web', 'auth'])
+            Route::middleware([
+                'web',
+                'auth',
+                \App\Http\Middleware\EnsureModuleEnabled::class . ':' . $this->moduleName(),
+            ])
                 ->prefix('app/modules/' . strtolower($this->moduleName()))
                 ->group($routesFile);
         }
