@@ -37,6 +37,12 @@ class ModuleServiceProvider extends ServiceProvider
             }
 
             $moduleName = basename($moduleDir);
+
+            // Check if module is enabled before registering
+            if (! app(\App\Services\ModuleRegistryService::class)->isModuleEnabled($moduleName)) {
+                continue;
+            }
+
             $providerClass = "App\\Modules\\{$moduleName}\\ModuleServiceProvider";
 
             if (class_exists($providerClass)) {

@@ -1,0 +1,17 @@
+{
+  "id": "TukarTambah",
+  "name": "Tukar Tambah (Trade-In)",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul transaksi tukar tambah barang bekas/lama dengan barang baru, mencakup inspeksi kondisi dan valuasi.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Separated Trade-in (Tukar Tambah) feature from MVP core",
+        "Integrated condition checklist and trade-in pricing valuation"
+      ]
+    }
+  ]
+}

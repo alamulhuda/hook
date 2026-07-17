@@ -37,21 +37,35 @@ const moduleManifests = import.meta.glob<{
 }>('./modules/*/routes.ts', { eager: true })
 
 /**
- * Returns all nav groups from installed modules, merged for the sidebar.
+ * Helper to check if a module directory is in the enabledModules list.
+ */
+function isManifestEnabled(path: string, enabledModules?: string[]): boolean {
+    if (!enabledModules || !Array.isArray(enabledModules)) {
+        return true
+    }
+    const match = path.match(/\.\/modules\/([^/]+)\/routes\.ts/)
+    if (!match) return true
+    const dir = match[1].toLowerCase()
+    return enabledModules.some(e => e.toLowerCase() === dir)
+}
+
+/**
+ * Returns all nav groups from installed & enabled modules, merged for the sidebar.
  * Empty navItems arrays are skipped automatically.
  */
-export function getModuleNavItems(): NavGroup[] {
-    return Object.values(moduleManifests)
-        .flatMap((mod) => mod.navItems ?? [])
+export function getModuleNavItems(enabledModules?: string[]): NavGroup[] {
+    return Object.entries(moduleManifests)
+        .filter(([path]) => isManifestEnabled(path, enabledModules))
+        .flatMap(([, mod]) => mod.navItems ?? [])
         .filter((group) => group.children.length > 0)
 }
 
 /**
- * Returns all dashboard widgets from installed modules, sorted by `order`.
- * Disabling a module = remove its routes.ts → widget disappears automatically.
+ * Returns all dashboard widgets from installed & enabled modules, sorted by `order`.
  */
-export function getModuleDashboardWidgets(): DashboardWidget[] {
-    return Object.values(moduleManifests)
-        .flatMap((mod) => mod.dashboardWidgets ?? [])
+export function getModuleDashboardWidgets(enabledModules?: string[]): DashboardWidget[] {
+    return Object.entries(moduleManifests)
+        .filter(([path]) => isManifestEnabled(path, enabledModules))
+        .flatMap(([, mod]) => mod.dashboardWidgets ?? [])
         .sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
 }

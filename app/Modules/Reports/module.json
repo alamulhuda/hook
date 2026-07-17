@@ -1,0 +1,17 @@
+{
+  "id": "Reports",
+  "name": "Laporan & Analitik",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul pelaporan komprehensif mencakup analitik penjualan, pembelian, stok barang, dan kinerja bisnis jangka panjang.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Separated analytical and executive reports from MVP core",
+        "Integrated custom export and chart views"
+      ]
+    }
+  ]
+}

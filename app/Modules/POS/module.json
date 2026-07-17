@@ -1,0 +1,17 @@
+{
+  "id": "POS",
+  "name": "Point of Sale (Kasir)",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul kasir interaktif untuk pemrosesan penjualan langsung di toko fisik dengan dukungan cetak struk dan barcode.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Separated POS physical cashier terminal from MVP core",
+        "Includes receipt printing and barcode scanner integration"
+      ]
+    }
+  ]
+}

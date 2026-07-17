@@ -1,0 +1,17 @@
+{
+  "id": "ServiceRepair",
+  "name": "Service & Perbaikan",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul layanan perbaikan elektronik, manajemen tiket perbaikan, penjadwalan teknisi, dan master jasa.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Separated Service & Repair workflows from MVP core",
+        "Added Master Jasa and technician scheduling features"
+      ]
+    }
+  ]
+}

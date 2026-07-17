@@ -1,0 +1,17 @@
+{
+  "id": "HR",
+  "name": "HR & Absensi",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul manajemen karyawan, absensi harian, penggajian (payroll), lembur, dan cuti.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Separated HR management from MVP core",
+        "Includes Absensi, Gaji Karyawan, Lembur, and Libur/Cuti management"
+      ]
+    }
+  ]
+}

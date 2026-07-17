@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, provide, onMounted } from 'vue'
-import { Link, router } from '@inertiajs/vue3'
+import { ref, computed, provide, onMounted } from 'vue'
+import { Link, router, usePage } from '@inertiajs/vue3'
 import { cn } from '@/lib/utils'
+import { getModuleNavItems } from '@/module-loader'
 import {
     Users,
     ShieldCheck,
@@ -28,6 +29,8 @@ interface NavItem {
     href?: string
     children?: NavItem[]
 }
+
+const page = usePage()
 
 const props = defineProps<{
     class?: string
@@ -104,6 +107,7 @@ const subNavigation: Record<string, NavItem[]> = {
     ],
     'settings': [
         { label: 'Settings', icon: Settings, href: '/app/settings' },
+        { label: 'Modules Management', icon: Package, href: '/app/settings/modules' },
         { label: 'Company Profile', icon: Package, href: '#' },
         { label: 'Tax', icon: Package, href: '#' },
     ],
@@ -129,6 +133,32 @@ function getActiveSectionFromPath(path: string): string {
 }
 
 const activeMainNav = ref(getActiveSectionFromPath(window.location.pathname))
+
+const activeSubNavItems = computed(() => {
+    const section = activeMainNav.value
+    const staticItems = subNavigation[section] || []
+    
+    // Check dynamic module navigation items
+    const enabled = page.props.enabled_modules as string[] | undefined
+    const dynamicGroups = getModuleNavItems(enabled)
+    
+    // Match dynamic groups to current section
+    const matchingGroups = dynamicGroups.filter(g => 
+        g.label.toLowerCase() === section.toLowerCase() ||
+        (section === 'service-repair' && g.label.toLowerCase().includes('service')) ||
+        (section === 'master-data' && g.label.toLowerCase().includes('master'))
+    )
+    
+    const dynamicItems: NavItem[] = matchingGroups.flatMap(g => 
+        g.children.map(c => ({
+            label: c.label,
+            icon: Package,
+            href: c.to
+        }))
+    )
+    
+    return [...staticItems, ...dynamicItems]
+})
 
 onMounted(() => {
     router.on('navigate', (event) => {
@@ -208,7 +238,7 @@ function isActiveHref(href?: string): boolean {
         
         <!-- Sub Navigation (Right Column) -->
         <div 
-            v-if="subNavigation[activeMainNav]"
+            v-if="activeSubNavItems && activeSubNavItems.length > 0"
             class="w-56 bg-card flex flex-col"
         >
             <div class="h-16 flex items-center px-4 border-b">
@@ -220,7 +250,7 @@ function isActiveHref(href?: string): boolean {
             <nav class="flex-1 py-2 overflow-y-auto">
                 <div class="px-2 space-y-0.5">
                     <Link
-                        v-for="item in subNavigation[activeMainNav]"
+                        v-for="item in activeSubNavItems"
                         :key="item.href"
                         :href="item.href || '#'"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors"

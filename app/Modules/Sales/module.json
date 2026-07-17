@@ -1,0 +1,17 @@
+{
+  "id": "Sales",
+  "name": "Sales Analytics & Widgets",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul widget dan analisis penjualan yang menampilkan transaksi terbaru, performa sales harian, dan grafik tren.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Created self-contained Sales module for dashboard analytics",
+        "Included Recent Sales widget with date range filtering"
+      ]
+    }
+  ]
+}

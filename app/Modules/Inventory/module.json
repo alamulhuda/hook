@@ -1,0 +1,18 @@
+{
+  "id": "Inventory",
+  "name": "Inventory Management",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul manajemen stok lanjutan mencakup penyesuaian stok (Stock Adjustment), Stock Opname, dan pemantauan batas stok minimum.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Separated advanced inventory workflows from MVP core",
+        "Added self-contained Low Stock Alert dashboard widget",
+        "Integrated Stock Adjustment and Stock Opname navigation"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "Marketing",
+  "name": "Marketing & Promosi",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul pemasaran untuk manajemen promo, agen supplier, kampanye pemasaran, dan kalender konten.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Separated Marketing workflows from MVP core",
+        "Added Content Calendar and Supplier Agent features"
+      ]
+    }
+  ]
+}

@@ -55,6 +55,7 @@ class AdminPanelProvider extends PanelProvider
         if (is_dir($modulesPath)) {
             foreach (scandir($modulesPath) as $module) {
                 if ($module === '.' || $module === '..' || !is_dir($modulesPath . '/' . $module)) continue;
+                if (! app(\App\Services\ModuleRegistryService::class)->isModuleEnabled($module)) continue;
                 $moduleResourcePath = $modulesPath . '/' . $module . '/Filament/Resources';
                 if (is_dir($moduleResourcePath)) {
                     \Illuminate\Support\Facades\Log::info("Discovering module resources in " . $moduleResourcePath . " for App\\Modules\\" . $module . "\\Filament\\Resources");

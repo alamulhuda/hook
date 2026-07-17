@@ -1,0 +1,17 @@
+{
+  "id": "Akunting",
+  "name": "Akunting & Keuangan",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul akunting lengkap dengan Chart of Accounts, Jurnal Transaksi, Laba Rugi, dan Neraca.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Separated Akunting from MVP core",
+        "Added Chart of Accounts, Journal Entries, Profit & Loss, and Balance Sheet features"
+      ]
+    }
+  ]
+}

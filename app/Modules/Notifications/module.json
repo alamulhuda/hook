@@ -1,0 +1,17 @@
+{
+  "id": "Notifications",
+  "name": "Notifikasi & Sistem Alert",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul pusat pemberitahuan, pengingat otomatis, alert sistem, dan riwayat notifikasi pengguna.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-17",
+      "changes": [
+        "Separated Notifications system from MVP core",
+        "Centralized alert and reminder management"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, defineAsyncComponent } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 import { Package, DollarSign, Users, ShoppingCart, TrendingUp, ArrowUpRight, ArrowDownRight, Calendar } from 'lucide-vue-next'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import Card from '@/components/ui/card.vue'
@@ -16,6 +16,8 @@ const props = defineProps({
         default: () => [],
     },
 })
+
+const page = usePage()
 
 const iconMap: Record<string, any> = {
     DollarSign,
@@ -51,12 +53,14 @@ function resetFilter() {
 }
 
 // ── Module widgets ─────────────────────────────────────────────────────────────
-// Loaded at build time via module-loader — no hardcoding needed.
-// Add / remove a module's routes.ts to include/exclude its widget.
-const widgets = getModuleDashboardWidgets().map((w) => ({
-    ...w,
-    asyncComponent: defineAsyncComponent(w.component),
-}))
+// Dynamically filtered based on enabled modules from backend settings
+const widgets = computed(() => {
+    const enabled = (page.props.enabled_modules as string[] | undefined)
+    return getModuleDashboardWidgets(enabled).map((w) => ({
+        ...w,
+        asyncComponent: defineAsyncComponent(w.component),
+    }))
+})
 </script>
 
 <template>

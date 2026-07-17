@@ -14,6 +14,7 @@ use App\Http\Controllers\App\SupplierController;
 use App\Http\Controllers\App\UserController;
 use App\Http\Controllers\App\RoleController;
 use App\Http\Controllers\App\PermissionController;
+use App\Http\Controllers\App\ModuleManagementController;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -139,6 +140,12 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
     // URL prefix: /app/modules/akunting/
 
     Route::get('/settings', function () { return Inertia::render('core/settings/Index'); })->name('app.settings');
+    
+    // Module Management
+    Route::get('/settings/modules', [ModuleManagementController::class, 'index'])->name('app.settings.modules');
+    Route::post('/settings/modules/{id}/toggle', [ModuleManagementController::class, 'toggle'])->name('app.settings.modules.toggle');
+    Route::post('/settings/modules/{id}/update', [ModuleManagementController::class, 'updateModule'])->name('app.settings.modules.update');
+    Route::delete('/settings/modules/{id}', [ModuleManagementController::class, 'destroy'])->name('app.settings.modules.destroy');
 });
 
 // POS receipt preview/print
