@@ -50,11 +50,11 @@ class PosPanelProvider extends PanelProvider
             ])
             // Register resources khusus POS.
             ->resources([
-                \App\Filament\Resources\PosSaleResource::class,
-                \App\Filament\Resources\PosActivityResource::class,
+                \App\Modules\POS\Filament\Resources\PosSaleResource::class,
+                \App\Modules\POS\Filament\Resources\PosActivityResource::class,
                 \App\Filament\Resources\InventoryResource::class,
-                \App\Filament\Resources\StockAdjustmentResource::class,
-                \App\Filament\Resources\StockOpnameResource::class,
+                \App\Modules\Inventory\Filament\Resources\StockAdjustmentResource::class,
+                \App\Modules\Inventory\Filament\Resources\StockOpnameResource::class,
             ])
             ->pages([
                 Pages\Dashboard::class,

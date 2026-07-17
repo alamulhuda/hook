@@ -111,7 +111,7 @@ class TaskComments extends Component
                 ->actions([
                     \Filament\Notifications\Actions\Action::make('view')
                         ->label('Lihat')
-                        ->url(\App\Filament\Resources\Penjadwalan\PenjadwalanTugasResource::getUrl('view', ['record' => $this->record->id]))
+                        ->url(\App\Modules\ServiceRepair\Filament\Resources\Penjadwalan\PenjadwalanTugasResource::getUrl('view', ['record' => $this->record->id]))
                         ->button(),
                 ])
                 ->sendToDatabase($receivers);

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Filament\Resources\Akunting\LaporanNeracaResource;
+use App\Modules\Akunting\Filament\Resources\LaporanNeracaResource;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;

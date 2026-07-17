@@ -2,7 +2,7 @@
 
 namespace App\Filament\Widgets;
 
-use App\Filament\Resources\Penjadwalan\PenjadwalanTugasResource;
+use App\Modules\ServiceRepair\Filament\Resources\Penjadwalan\PenjadwalanTugasResource;
 use App\Models\PenjadwalanTugas;
 use App\Enums\StatusTugas;
 use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;

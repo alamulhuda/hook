@@ -26,9 +26,9 @@ use Guava\Calendar\Widgets\CalendarWidget;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Components\DateTimePicker;
-use App\Filament\Resources\Absensi\LiburCutiResource;
-use App\Filament\Resources\Penjadwalan\KalenderEventResource;
-use App\Filament\Resources\Penjadwalan\PenjadwalanTugasResource;
+use App\Modules\HR\Filament\Resources\Absensi\LiburCutiResource;
+use App\Modules\ServiceRepair\Filament\Resources\Penjadwalan\KalenderEventResource;
+use App\Modules\ServiceRepair\Filament\Resources\Penjadwalan\PenjadwalanTugasResource;
 
 class JadwalKalenderWidget extends CalendarWidget
 {

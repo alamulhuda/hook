@@ -51,11 +51,11 @@ class AkuntingPanelProvider extends PanelProvider
             ->maxContentWidth(MaxWidth::Full)
             // Register resources khusus Keuangan.
             ->resources([
-                \App\Filament\Resources\Akunting\JenisAkunResource::class,
-                \App\Filament\Resources\Akunting\KodeAkunResource::class,
-                \App\Filament\Resources\Akunting\InputTransaksiTokoResource::class,
-                \App\Filament\Resources\Akunting\LaporanInputTransaksiResource::class,
-                \App\Filament\Resources\Akunting\LaporanNeracaResource::class,
+                \App\Modules\Akunting\Filament\Resources\JenisAkunResource::class,
+                \App\Modules\Akunting\Filament\Resources\KodeAkunResource::class,
+                \App\Modules\Akunting\Filament\Resources\InputTransaksiTokoResource::class,
+                \App\Modules\Akunting\Filament\Resources\LaporanInputTransaksiResource::class,
+                \App\Modules\Akunting\Filament\Resources\LaporanNeracaResource::class,
             ])
             ->pages([
                 Pages\Dashboard::class,

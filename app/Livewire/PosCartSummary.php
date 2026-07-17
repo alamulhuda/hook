@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Filament\Resources\PosSaleResource;
+use App\Modules\POS\Filament\Resources\PosSaleResource;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 

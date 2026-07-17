@@ -6,7 +6,7 @@ use EightyNine\FilamentAdvancedWidget\AdvancedTableWidget;
 use Filament\Infolists\Infolist;
 use Filament\Tables;
 use Filament\Tables\Table;
-use App\Filament\Resources\Penjadwalan\PenjadwalanServiceResource;
+use App\Modules\ServiceRepair\Filament\Resources\Penjadwalan\PenjadwalanServiceResource;
 use App\Models\PenjadwalanService;
 use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 

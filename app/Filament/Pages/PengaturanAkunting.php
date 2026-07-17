@@ -2,9 +2,9 @@
 
 namespace App\Filament\Pages;
 
-use App\Filament\Resources\Akunting\JenisAkunResource;
-use App\Filament\Resources\Akunting\KodeAkunResource;
-use App\Filament\Resources\Akunting\InputTransaksiTokoResource;
+use App\Modules\Akunting\Filament\Resources\JenisAkunResource;
+use App\Modules\Akunting\Filament\Resources\KodeAkunResource;
+use App\Modules\Akunting\Filament\Resources\InputTransaksiTokoResource;
 use App\Models\JenisAkun;
 use App\Models\KodeAkun;
 use Filament\Facades\Filament;

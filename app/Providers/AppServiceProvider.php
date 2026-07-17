@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Providers\ModuleServiceProvider;
 use App\Support\ChatifyMessenger;
 use App\Http\Responses\PanelLoginResponse;
 use BezhanSalleh\FilamentShield\Facades\FilamentShield;
@@ -22,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // Auto-discover and register all Module service providers from app/Modules/
+        $this->app->register(ModuleServiceProvider::class);
+
         // Register filament-edit-profile Livewire components globally
         // The plugin registers these in Filament's panel boot() which doesn't run for /livewire/update requests
         $this->app->booted(function () {

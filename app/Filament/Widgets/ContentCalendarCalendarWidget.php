@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use Filament\Notifications\Notification;
 use Guava\Calendar\Widgets\CalendarWidget;
 use Filament\Forms\Concerns\InteractsWithForms;
-use App\Filament\Resources\KontenSosmed\ContentCalendarResource;
+use App\Modules\Marketing\Filament\Resources\KontenSosmed\ContentCalendarResource;
 
 class ContentCalendarCalendarWidget extends CalendarWidget
 {

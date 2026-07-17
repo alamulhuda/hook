@@ -2,7 +2,7 @@
 
 namespace App\Filament\Widgets\AtributCrosscheck;
 
-use App\Filament\Resources\Penjadwalan\Service\ListAplikasiResource;
+use App\Modules\ServiceRepair\Filament\Resources\Penjadwalan\Service\ListAplikasiResource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;

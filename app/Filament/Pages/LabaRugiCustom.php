@@ -80,7 +80,7 @@ class LabaRugiCustom extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            \App\Filament\Resources\Akunting\LaporanLabaRugiResource::getUrl('index') => \App\Filament\Resources\Akunting\LaporanLabaRugiResource::getBreadcrumb(),
+            \App\Modules\Akunting\Filament\Resources\LaporanLabaRugiResource::getUrl('index') => \App\Modules\Akunting\Filament\Resources\LaporanLabaRugiResource::getBreadcrumb(),
             'Detail',
         ];
     }

@@ -10,8 +10,6 @@ use App\Http\Controllers\App\JasaController;
 use App\Http\Controllers\App\MemberController;
 use App\Http\Controllers\App\ProdukController;
 use App\Http\Controllers\App\InventoryProductController;
-use App\Http\Controllers\App\StockAdjustmentController;
-use App\Http\Controllers\App\StockOpnameController;
 use App\Http\Controllers\App\SupplierController;
 use App\Http\Controllers\App\UserController;
 use App\Http\Controllers\App\RoleController;
@@ -131,36 +129,15 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
         });
         
         Route::prefix('inventory')->group(function () {
-            // Inventory Products
+            // Inventory Products — Core: view-only product stock summary
             Route::get('/products', [InventoryProductController::class, 'index'])->name('app.inventory.products');
-            // Stock Adjustment
-            Route::get('/stock-adjustment/create', [StockAdjustmentController::class, 'create'])->name('app.stock-adjustment.create');
-            Route::post('/stock-adjustment', [StockAdjustmentController::class, 'store'])->name('app.stock-adjustment.store');
-            Route::get('/stock-adjustment/{stockAdjustment}/edit', [StockAdjustmentController::class, 'edit'])->name('app.stock-adjustment.edit');
-            Route::put('/stock-adjustment/{stockAdjustment}', [StockAdjustmentController::class, 'update'])->name('app.stock-adjustment.update');
-            Route::delete('/stock-adjustment/{stockAdjustment}', [StockAdjustmentController::class, 'destroy'])->name('app.stock-adjustment.destroy');
-            Route::post('/stock-adjustment/{stockAdjustment}/post', [StockAdjustmentController::class, 'post'])->name('app.stock-adjustment.post');
-            Route::get('/stock-adjustment/{stockAdjustment}', [StockAdjustmentController::class, 'show'])->name('app.stock-adjustment.show');
-            Route::get('/stock-adjustment', [StockAdjustmentController::class, 'index'])->name('app.stock-adjustment');
-            // Stock Opname
-            Route::get('/stock-opname/create', [StockOpnameController::class, 'create'])->name('app.stock-opname.create');
-            Route::post('/stock-opname', [StockOpnameController::class, 'store'])->name('app.stock-opname.store');
-            Route::get('/stock-opname/{stockOpname}/edit', [StockOpnameController::class, 'edit'])->name('app.stock-opname.edit');
-            Route::put('/stock-opname/{stockOpname}', [StockOpnameController::class, 'update'])->name('app.stock-opname.update');
-            Route::delete('/stock-opname/{stockOpname}', [StockOpnameController::class, 'destroy'])->name('app.stock-opname.destroy');
-            Route::post('/stock-opname/{stockOpname}/post', [StockOpnameController::class, 'post'])->name('app.stock-opname.post');
-            Route::get('/stock-opname/{stockOpname}', [StockOpnameController::class, 'show'])->name('app.stock-opname.show');
-            Route::get('/stock-opname', [StockOpnameController::class, 'index'])->name('app.stock-opname');
+            // StockAdjustment & StockOpname moved to Modules\Inventory (app/Modules/Inventory/routes.php)
         });
     });
     
-    Route::prefix('akunting')->group(function () {
-        Route::get('/chart-of-accounts', function () { return Inertia::render('app/akunting/chart-of-accounts/Index'); })->name('app.chart-of-accounts');
-        Route::get('/input-transaksi', function () { return Inertia::render('app/akunting/input-transaksi/Index'); })->name('app.input-transaksi');
-        Route::get('/laporan-laba-rugi', function () { return Inertia::render('app/akunting/laporan-laba-rugi/Index'); })->name('app.laporan-laba-rugi');
-        Route::get('/laporan-neraca', function () { return Inertia::render('app/akunting/laporan-neraca/Index'); })->name('app.laporan-neraca');
-    });
-    
+    // Akunting routes moved to Modules\Akunting (app/Modules/Akunting/routes.php)
+    // URL prefix: /app/modules/akunting/
+
     Route::get('/settings', function () { return Inertia::render('app/settings/Index'); })->name('app.settings');
 });
 

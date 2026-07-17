@@ -11,7 +11,7 @@ use Filament\Tables;
 use Filament\Infolists\Infolist;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\PosActivityResource;
+use App\Modules\POS\Filament\Resources\PosActivityResource;
 use Filament\Facades\Filament;
 
 
