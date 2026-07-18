@@ -297,7 +297,7 @@ function onTransactionSaved() {
                 :is="viewMode === 'sheet' ? SheetContent : Dialog"
                 :open="showForm"
                 @update:open="showForm = $event"
-                :class="viewMode === 'sheet' ? 'w-[600px] sm:max-w-[600px]' : 'max-w-2xl max-h-[90vh]'"
+                :class="viewMode === 'sheet' ? 'w-[1000px] sm:max-w-[1000px]' : 'max-w-5xl max-h-[90vh]'"
             >
                 <div :class="viewMode === 'sheet' ? 'space-y-6 h-full flex flex-col' : 'space-y-6 flex flex-col max-h-[calc(90vh-3rem)]'">
                     <div class="flex items-start justify-between gap-4">
