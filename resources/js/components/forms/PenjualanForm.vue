@@ -140,6 +140,11 @@ function removeItem(index: number) {
 
 function onProductSelect(item: ItemRow, produk: ProdukOption) {
     item.id_produk = produk.id
+    if (produk.last_selling_price) {
+        item.selling_price = produk.last_selling_price
+    } else {
+        item.selling_price = 0
+    }
 }
 
 function addPayment() {

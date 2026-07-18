@@ -9,7 +9,7 @@ import {
     Loader2,
     Package,
 } from 'lucide-vue-next'
-import { cn } from '@/lib/utils'
+import { cn, formatCurrency } from '@/lib/utils'
 import axios from 'axios'
 
 export interface ProdukOption {
@@ -20,6 +20,8 @@ export interface ProdukOption {
     kategori: { id: number; nama_kategori: string } | null
     image_url: string | null
     stok_on_hand?: number
+    last_cost_price?: number | null
+    last_selling_price?: number | null
 }
 
 interface Props {
@@ -420,6 +422,9 @@ defineExpose({
                                     </template>
                                     <template v-if="option.kategori">
                                         &middot; {{ option.kategori.nama_kategori }}
+                                    </template>
+                                    <template v-if="option.last_cost_price">
+                                        &middot; Cost: {{ formatCurrency(option.last_cost_price) }}
                                     </template>
                                 </span>
                             </div>
