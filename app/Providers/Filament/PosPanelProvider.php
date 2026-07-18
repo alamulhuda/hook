@@ -15,11 +15,9 @@ use Shanerbaner82\PanelRoles\PanelRoles;
 use BezhanSalleh\PanelSwitch\PanelSwitch;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Widgets\ActiveMembersTable;
-use App\Filament\Widgets\LowStockProductsTable;
 use App\Filament\Widgets\PosSalesStatsOverview;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use App\Filament\Widgets\TopSellingProductsTable;
 use App\Filament\Widgets\OpenWeatherWidget;
 use Filament\Http\Middleware\AuthenticateSession;
 use App\Filament\Widgets\MonthlyRevenueTrendChart;
@@ -52,7 +50,6 @@ class PosPanelProvider extends PanelProvider
             ->resources([
                 \App\Modules\POS\Filament\Resources\PosSaleResource::class,
                 \App\Modules\POS\Filament\Resources\PosActivityResource::class,
-                \App\Filament\Resources\InventoryResource::class,
                 \App\Modules\Inventory\Filament\Resources\StockAdjustmentResource::class,
                 \App\Modules\Inventory\Filament\Resources\StockOpnameResource::class,
             ])
@@ -64,9 +61,7 @@ class PosPanelProvider extends PanelProvider
                 PosSalesStatsOverview::class,
                 MonthlyRevenueTrendChart::class,
                 ActiveMembersTable::class,
-                LowStockProductsTable::class,
                 RecentPosTransactionsTable::class,
-                TopSellingProductsTable::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Pages\AppDashboard;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin as ShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
 // use App\Filament\Pages\ChatRoomPage;
@@ -69,7 +68,7 @@ class AdminPanelProvider extends PanelProvider
 
         $panel = $panel->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                AppDashboard::class,
+                \Filament\Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -80,12 +79,10 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\JadwalKalenderWidget::class,
                 \App\Filament\Widgets\ContentCalendarCalendarWidget::class,
                 \App\Filament\Widgets\AdvancedStatsOverviewWidget::class,
-                \App\Filament\Widgets\LowStockProductsTable::class,
                 \App\Filament\Widgets\MonthlyRevenueTrendChart::class,
                 // \App\Filament\Widgets\PosSalesStatsOverview::class,
                 \App\Filament\Widgets\RecentPosTransactionsTable::class,
                 \App\Filament\Widgets\ServiceWidget::class,
-                \App\Filament\Widgets\TopSellingProductsTable::class,
                 \App\Filament\Widgets\TugasWidget::class,
             ])
             ->middleware([
