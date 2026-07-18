@@ -48,6 +48,7 @@ const form = ref({
     catatan: pembelian.value?.catatan ?? '',
     tipe_pembelian: pembelian.value?.tipe_pembelian ?? 'non_ppn',
     jenis_pembayaran: pembelian.value?.jenis_pembayaran ?? 'lunas',
+    akun_transaksi_id: pembelian.value?.pembayaran?.[0]?.akun_transaksi_id ?? null as number | null,
     tgl_tempo: formatDateInput(pembelian.value?.tgl_tempo) ?? '',
     items: (pembelian.value.items || []).map((item: any) => ({
         id: item.id_pembelian_item,
@@ -123,7 +124,8 @@ function submit() {
         catatan: form.value.catatan,
         tipe_pembelian: form.value.tipe_pembelian,
         jenis_pembayaran: form.value.jenis_pembayaran,
-        tgl_tempo: form.value.tgl_tempo || null,
+        akun_transaksi_id: form.value.jenis_pembayaran === 'lunas' ? form.value.akun_transaksi_id : null,
+        tgl_tempo: form.value.jenis_pembayaran === 'tempo' ? (form.value.tgl_tempo || null) : null,
         items: form.value.items.map(item => ({
             id: item.id,
             id_produk: item.id_produk,
@@ -310,6 +312,29 @@ function submit() {
                                             {{ option.label }}
                                         </option>
                                     </select>
+                                    <span v-if="errors.jenis_pembayaran" class="text-xs text-destructive mt-1 block">
+                                        {{ errors.jenis_pembayaran }}
+                                    </span>
+                                </div>
+
+                                <div v-if="form.jenis_pembayaran === 'lunas'">
+                                    <label class="text-sm text-muted-foreground block mb-1">Kas / Bank Account</label>
+                                    <select
+                                        v-model="form.akun_transaksi_id"
+                                        class="w-full h-9 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                    >
+                                        <option :value="null">Select Kas / Bank...</option>
+                                        <option
+                                            v-for="account in paymentAccounts"
+                                            :key="account.id"
+                                            :value="account.id"
+                                        >
+                                            {{ account.nama_akun }} ({{ account.jenis }})
+                                        </option>
+                                    </select>
+                                    <span v-if="errors.akun_transaksi_id" class="text-xs text-destructive mt-1 block">
+                                        {{ errors.akun_transaksi_id }}
+                                    </span>
                                 </div>
                                 
                                 <div v-if="form.jenis_pembayaran === 'tempo'">
@@ -319,6 +344,9 @@ function submit() {
                                         type="date"
                                         class="w-full"
                                     />
+                                    <span v-if="errors.tgl_tempo" class="text-xs text-destructive mt-1 block">
+                                        {{ errors.tgl_tempo }}
+                                    </span>
                                 </div>
                             </div>
                         </Card>

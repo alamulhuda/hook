@@ -9,6 +9,7 @@ use App\Models\Supplier;
 use App\Models\Produk;
 use App\Models\Karyawan;
 use App\Models\AkunTransaksi;
+use App\Models\PembelianPembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -114,6 +115,7 @@ class PembelianController extends Controller
             'catatan' => 'nullable|string',
             'tipe_pembelian' => 'nullable|in:ppn,non_ppn',
             'jenis_pembayaran' => 'nullable|in:lunas,tempo',
+            'akun_transaksi_id' => 'required_if:jenis_pembayaran,lunas|nullable|exists:akun_transaksis,id',
             'tgl_tempo' => 'nullable|date',
             'items' => 'required|array|min:1',
             'items.*.id_produk' => 'required|exists:md_produk,id',
@@ -165,6 +167,17 @@ class PembelianController extends Controller
             ]);
         }
 
+        // Create payment record if payment type is Lunas
+        if ($validated['jenis_pembayaran'] === 'lunas' && !empty($validated['akun_transaksi_id'])) {
+            PembelianPembayaran::create([
+                'id_pembelian' => $pembelian->id_pembelian,
+                'tanggal' => $pembelian->tanggal,
+                'metode_bayar' => 'cash',
+                'akun_transaksi_id' => $validated['akun_transaksi_id'],
+                'jumlah' => $total,
+            ]);
+        }
+
         return redirect()->route('app.pembelian.show', $pembelian->id_pembelian)
             ->with('success', 'Pembelian created successfully.');
     }
@@ -190,7 +203,7 @@ class PembelianController extends Controller
      */
     public function edit(Pembelian $pembelian)
     {
-        $pembelian->load(['items']);
+        $pembelian->load(['items', 'pembayaran']);
 
         $suppliers = Supplier::orderBy('nama_supplier')->get(['id', 'nama_supplier']);
         $karyawans = Karyawan::orderBy('nama_karyawan')->get(['id', 'nama_karyawan']);
@@ -229,6 +242,7 @@ class PembelianController extends Controller
             'catatan' => 'nullable|string',
             'tipe_pembelian' => 'nullable|in:ppn,non_ppn',
             'jenis_pembayaran' => 'nullable|in:lunas,tempo',
+            'akun_transaksi_id' => 'required_if:jenis_pembayaran,lunas|nullable|exists:akun_transaksis,id',
             'tgl_tempo' => 'nullable|date',
             'items' => 'required|array|min:1',
             'items.*.id' => 'nullable|exists:tb_pembelian_item,id_pembelian_item',
@@ -270,20 +284,20 @@ class PembelianController extends Controller
         ]);
 
         // Sync items
-        $existingIds = collect($validated['items'])->pluck('id')->filter()->toArray();
-        $pembelian->items()->whereNotIn('id_pembelian_item', $existingIds)->delete();
-
+        $existingItemIds = [];
         foreach ($validated['items'] as $itemData) {
             if (!empty($itemData['id'])) {
-                $item = PembelianItem::find($itemData['id']);
+                $item = PembelianItem::findOrFail($itemData['id']);
                 $item->update([
                     'id_produk' => $itemData['id_produk'],
                     'qty' => $itemData['qty'],
+                    'qty_sisa' => $itemData['qty'], // Update qty_sisa appropriately
                     'cost_price' => $itemData['cost_price'],
                     'selling_price' => $itemData['selling_price'],
                 ]);
+                $existingItemIds[] = $item->id_pembelian_item;
             } else {
-                PembelianItem::create([
+                $item = PembelianItem::create([
                     'id_pembelian' => $pembelian->id_pembelian,
                     'id_produk' => $itemData['id_produk'],
                     'qty' => $itemData['qty'],
@@ -292,7 +306,33 @@ class PembelianController extends Controller
                     'cost_price' => $itemData['cost_price'],
                     'selling_price' => $itemData['selling_price'],
                 ]);
+                $existingItemIds[] = $item->id_pembelian_item;
             }
+        }
+
+        // Delete items that are no longer in the list
+        $pembelian->items()->whereNotIn('id_pembelian_item', $existingItemIds)->delete();
+
+        // Create or update payment record if payment type is Lunas
+        if ($validated['jenis_pembayaran'] === 'lunas' && !empty($validated['akun_transaksi_id'])) {
+            $payment = PembelianPembayaran::where('id_pembelian', $pembelian->id_pembelian)->first();
+            if ($payment) {
+                $payment->update([
+                    'akun_transaksi_id' => $validated['akun_transaksi_id'],
+                    'jumlah' => $total,
+                ]);
+            } else {
+                PembelianPembayaran::create([
+                    'id_pembelian' => $pembelian->id_pembelian,
+                    'tanggal' => $pembelian->tanggal,
+                    'metode_bayar' => 'cash',
+                    'akun_transaksi_id' => $validated['akun_transaksi_id'],
+                    'jumlah' => $total,
+                ]);
+            }
+        } else {
+            // Delete cash payments if changed to tempo
+            PembelianPembayaran::where('id_pembelian', $pembelian->id_pembelian)->delete();
         }
 
         return redirect()->route('app.pembelian.show', $pembelian->id_pembelian)

@@ -169,7 +169,7 @@ const subNavigation: Record<string, NavItem[]> = {
         { label: 'Journal Entries',  icon: FileText,         href: '/app/modules/akunting/input-transaksi',    module: 'Akunting' },
         { label: 'Invoices',         icon: ReceiptText,      href: '#',                                          module: 'Akunting', badge: 'Soon' },
         { label: 'Expenses',         icon: Calculator,       href: '#',                                          module: 'Akunting', badge: 'Soon' },
-        { label: 'Cash & Bank',      icon: Building2,        href: '#',                                          module: 'Akunting', badge: 'Soon' },
+        { label: 'Cash & Bank',      icon: Building2,        href: '/app/admin/master-data/akun-transaksi',      module: 'Akunting' },
         { label: 'Profit & Loss',    icon: BarChart3,        href: '/app/modules/akunting/laporan-laba-rugi',  module: 'Akunting' },
         { label: 'Balance Sheet',    icon: BarChart3,        href: '/app/modules/akunting/laporan-neraca',     module: 'Akunting' },
     ],
@@ -201,6 +201,7 @@ const subNavigation: Record<string, NavItem[]> = {
     // ── 10. Settings ──────────────────────────────────────────────────────────
     'settings': [
         { label: 'General Settings', icon: Cog,              href: '/app/settings' },
+        { label: 'Bank Accounts',    icon: Building2,        href: '/app/admin/master-data/akun-transaksi' },
         { label: 'Company Profile',  icon: Building2,        href: '#',                        badge: 'Soon' },
         { label: 'Tax',              icon: Calculator,       href: '#',                        badge: 'Soon' },
         // User & Access Management (nested under Settings — ERP standard)
@@ -232,6 +233,7 @@ function getActiveSectionFromPath(path: string): string {
     if (path.startsWith('/app/modules/service-repair')) return 'service'
     if (path.startsWith('/app/modules/pos')) return 'sales'
     if (path.startsWith('/app/modules/reports')) return 'reports'
+    if (path.startsWith('/app/admin/master-data/akun-transaksi')) return 'settings'
     if (path.startsWith('/app/admin/users') || path.startsWith('/app/admin/roles') || path.startsWith('/app/settings')) return 'settings'
     if (path.startsWith('/app/dashboard')) return 'dashboard'
     return 'dashboard'

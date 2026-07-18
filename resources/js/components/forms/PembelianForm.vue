@@ -19,6 +19,7 @@ const emit = defineEmits<{
 const page = usePage()
 
 const jenisPembayaranOptions = computed(() => (page.props as any).jenisPembayaranOptions || [])
+const paymentAccounts = computed(() => (page.props as any).paymentAccounts || [])
 
 const supplierOptions = ref<SelectOption[]>(
     ((page.props as any).suppliers || []).map((s: any) => ({
@@ -45,6 +46,7 @@ const form = ref({
     catatan: '',
     tipe_pembelian: 'non_ppn',
     jenis_pembayaran: 'lunas',
+    akun_transaksi_id: null as number | null,
     tgl_tempo: '',
     items: [] as ItemRow[],
     foto_dokumen: [] as File[],
@@ -285,7 +287,8 @@ function submit() {
         catatan: form.value.catatan,
         tipe_pembelian: form.value.tipe_pembelian,
         jenis_pembayaran: form.value.jenis_pembayaran,
-        tgl_tempo: form.value.tgl_tempo || null,
+        akun_transaksi_id: form.value.jenis_pembayaran === 'lunas' ? form.value.akun_transaksi_id : null,
+        tgl_tempo: form.value.jenis_pembayaran === 'tempo' ? (form.value.tgl_tempo || null) : null,
         items: form.value.items.map(item => ({
             id_produk: item.id_produk,
             qty: item.qty,
@@ -303,6 +306,7 @@ function submit() {
     if (payload.catatan) formData.append('catatan', payload.catatan)
     if (payload.tipe_pembelian) formData.append('tipe_pembelian', payload.tipe_pembelian)
     if (payload.jenis_pembayaran) formData.append('jenis_pembayaran', payload.jenis_pembayaran)
+    if (payload.akun_transaksi_id) formData.append('akun_transaksi_id', String(payload.akun_transaksi_id))
     if (payload.tgl_tempo) formData.append('tgl_tempo', payload.tgl_tempo)
     
     payload.items.forEach((item, index) => {
@@ -336,6 +340,7 @@ function resetForm() {
         catatan: '',
         tipe_pembelian: 'non_ppn',
         jenis_pembayaran: 'lunas',
+        akun_transaksi_id: null,
         tgl_tempo: '',
         items: [],
         foto_dokumen: [],
@@ -413,6 +418,29 @@ onMounted(() => {
                                 {{ option.label }}
                             </option>
                         </select>
+                        <span v-if="errors.jenis_pembayaran" class="text-xs text-destructive mt-1 block">
+                            {{ errors.jenis_pembayaran }}
+                        </span>
+                    </div>
+
+                    <div v-if="form.jenis_pembayaran === 'lunas'">
+                        <label class="text-sm text-muted-foreground block mb-1">Kas / Bank Account</label>
+                        <select
+                            v-model="form.akun_transaksi_id"
+                            class="w-full h-9 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        >
+                            <option :value="null">Select Kas / Bank...</option>
+                            <option
+                                v-for="account in paymentAccounts"
+                                :key="account.id"
+                                :value="account.id"
+                            >
+                                {{ account.nama_akun }} ({{ account.jenis }})
+                            </option>
+                        </select>
+                        <span v-if="errors.akun_transaksi_id" class="text-xs text-destructive mt-1 block">
+                            {{ errors.akun_transaksi_id }}
+                        </span>
                     </div>
 
                     <div v-if="form.jenis_pembayaran === 'tempo'">
@@ -422,6 +450,9 @@ onMounted(() => {
                             type="date"
                             class="w-full"
                         />
+                        <span v-if="errors.tgl_tempo" class="text-xs text-destructive mt-1 block">
+                            {{ errors.tgl_tempo }}
+                        </span>
                     </div>
                 </div>
             </Card>
