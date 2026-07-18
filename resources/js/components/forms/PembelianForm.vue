@@ -8,7 +8,9 @@ import Dialog from '@/components/ui/dialog.vue'
 import FormField from '@/components/forms/FormField.vue'
 import RelationSelect, { type SelectOption } from '@/components/forms/RelationSelect.vue'
 import ProdukSelect, { type ProdukOption } from '@/components/forms/ProdukSelect.vue'
-import { Plus, Trash2, Package, Save } from 'lucide-vue-next'
+import CurrencyInput from '@/components/forms/CurrencyInput.vue'
+import MultiImageUpload from '@/components/ui/MultiImageUpload.vue'
+import { Plus, Trash2, Package, Save, Image as ImageIcon } from 'lucide-vue-next'
 
 const emit = defineEmits<{
     saved: []
@@ -29,8 +31,10 @@ interface ItemRow {
     id: string
     id_produk: number | null
     qty: number
-    cost_price: number
-    selling_price: number
+    cost_price: number | null
+    selling_price: number | null
+    _autofill_cost: number
+    _autofill_selling: number
 }
 
 const form = ref({
@@ -43,19 +47,26 @@ const form = ref({
     jenis_pembayaran: 'lunas',
     tgl_tempo: '',
     items: [] as ItemRow[],
+    foto_dokumen: [] as File[],
+})
+
+const selectedProductIds = computed(() => {
+    return form.value.items.map(item => item.id_produk).filter((id): id is number => id !== null)
 })
 
 const errors = ref<Record<string, string>>({})
 
 const totalCost = computed(() => {
     return form.value.items.reduce((sum, item) => {
-        return sum + (item.qty * item.cost_price)
+        const cost = item.cost_price !== null ? item.cost_price : item._autofill_cost
+        return sum + (item.qty * cost)
     }, 0)
 })
 
 const totalSellingPrice = computed(() => {
     return form.value.items.reduce((sum, item) => {
-        return sum + (item.qty * item.selling_price)
+        const price = item.selling_price !== null ? item.selling_price : item._autofill_selling
+        return sum + (item.qty * price)
     }, 0)
 })
 
@@ -68,8 +79,10 @@ function addItem() {
         id: `new-${Date.now()}`,
         id_produk: null,
         qty: 1,
-        cost_price: 0,
-        selling_price: 0,
+        cost_price: null,
+        selling_price: null,
+        _autofill_cost: 0,
+        _autofill_selling: 0,
     })
 }
 
@@ -79,6 +92,13 @@ function removeItem(index: number) {
 
 function onProductSelect(item: ItemRow, produk: ProdukOption) {
     item.id_produk = produk.id
+    // Set autofill references
+    item._autofill_cost = produk.last_cost_price || 0
+    item._autofill_selling = produk.last_selling_price || 0
+    
+    // Clear current inputs so placeholder shows autofill
+    item.cost_price = null
+    item.selling_price = null
 }
 
 // --- Supplier Modal ---
@@ -221,10 +241,11 @@ async function submitSupplierForm() {
         }
 
         const newSupplier = await res.json()
-        supplierOptions.value.push({
-            label: newSupplier.nama_supplier,
-            value: newSupplier.id,
-        })
+        // Re-assign the array to trigger reactivity in RelationSelect
+        supplierOptions.value = [
+            ...supplierOptions.value,
+            { label: newSupplier.nama_supplier, value: newSupplier.id }
+        ]
         form.value.id_supplier = newSupplier.id
         showSupplierModal.value = false
     } catch (e) {
@@ -256,7 +277,7 @@ function submit() {
         return
     }
 
-    router.post('/app/admin/transactions/pembelian', {
+    const payload = {
         tanggal: form.value.tanggal,
         id_supplier: form.value.id_supplier,
         id_karyawan: form.value.id_karyawan,
@@ -268,10 +289,34 @@ function submit() {
         items: form.value.items.map(item => ({
             id_produk: item.id_produk,
             qty: item.qty,
-            cost_price: item.cost_price,
-            selling_price: item.selling_price,
+            cost_price: item.cost_price !== null ? item.cost_price : item._autofill_cost,
+            selling_price: item.selling_price !== null ? item.selling_price : item._autofill_selling,
         })),
-    }, {
+    }
+    
+    // Use FormData for file upload
+    const formData = new FormData()
+    formData.append('tanggal', payload.tanggal)
+    if (payload.id_supplier) formData.append('id_supplier', String(payload.id_supplier))
+    if (payload.id_karyawan) formData.append('id_karyawan', String(payload.id_karyawan))
+    if (payload.nota_supplier) formData.append('nota_supplier', payload.nota_supplier)
+    if (payload.catatan) formData.append('catatan', payload.catatan)
+    if (payload.tipe_pembelian) formData.append('tipe_pembelian', payload.tipe_pembelian)
+    if (payload.jenis_pembayaran) formData.append('jenis_pembayaran', payload.jenis_pembayaran)
+    if (payload.tgl_tempo) formData.append('tgl_tempo', payload.tgl_tempo)
+    
+    payload.items.forEach((item, index) => {
+        formData.append(`items[${index}][id_produk]`, String(item.id_produk))
+        formData.append(`items[${index}][qty]`, String(item.qty))
+        formData.append(`items[${index}][cost_price]`, String(item.cost_price))
+        formData.append(`items[${index}][selling_price]`, String(item.selling_price))
+    })
+    
+    form.value.foto_dokumen.forEach((file, index) => {
+        formData.append(`foto_dokumen[${index}]`, file)
+    })
+
+    router.post('/app/admin/transactions/pembelian', formData, {
         onSuccess: () => {
             resetForm()
             emit('saved')
@@ -293,6 +338,7 @@ function resetForm() {
         jenis_pembayaran: 'lunas',
         tgl_tempo: '',
         items: [],
+        foto_dokumen: [],
     }
     errors.value = {}
     addItem()
@@ -409,6 +455,7 @@ onMounted(() => {
                         <div class="flex-1">
                             <ProdukSelect
                                 :model-value="item.id_produk"
+                                :exclude-ids="selectedProductIds.filter(id => id !== item.id_produk)"
                                 @update:model-value="item.id_produk = $event"
                                 @select="onProductSelect(item, $event)"
                                 placeholder="Search product..."
@@ -423,25 +470,23 @@ onMounted(() => {
                             />
                         </div>
                         <div class="w-28">
-                            <Input
-                                v-model.number="item.cost_price"
-                                type="number"
-                                min="0"
-                                class="text-right"
-                                placeholder="0"
+                            <CurrencyInput
+                                v-model="item.cost_price"
+                                :autofill-value="item._autofill_cost"
+                                :hide-currency="true"
+                                class="w-full text-right"
                             />
                         </div>
                         <div class="w-28">
-                            <Input
-                                v-model.number="item.selling_price"
-                                type="number"
-                                min="0"
-                                class="text-right"
-                                placeholder="0"
+                            <CurrencyInput
+                                v-model="item.selling_price"
+                                :autofill-value="item._autofill_selling"
+                                :hide-currency="true"
+                                class="w-full text-right"
                             />
                         </div>
                         <div class="w-24 text-right text-sm font-medium py-2">
-                            {{ formatCurrency(item.qty * item.cost_price) }}
+                            {{ formatCurrency(item.qty * (item.cost_price !== null ? item.cost_price : item._autofill_cost)) }}
                         </div>
                         <Button
                             type="button"
@@ -463,6 +508,18 @@ onMounted(() => {
                     v-model="form.catatan"
                     class="w-full h-20 rounded-md border border-input bg-background px-3 py-2 text-sm"
                     placeholder="Add notes..."
+                />
+            </Card>
+
+            <Card class="p-4">
+                <div class="flex items-center gap-2 mb-4">
+                    <ImageIcon class="h-5 w-5" />
+                    <h3 class="font-semibold">Foto Dokumen (Nota/Kwitansi)</h3>
+                </div>
+                <MultiImageUpload
+                    v-model="form.foto_dokumen"
+                    :max-files="5"
+                    helper-text="Upload receipts or documents (max 5 files)"
                 />
             </Card>
 

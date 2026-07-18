@@ -10,6 +10,7 @@ use App\Models\Produk;
 use App\Models\Karyawan;
 use App\Models\AkunTransaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class PembelianController extends Controller
@@ -119,11 +120,22 @@ class PembelianController extends Controller
             'items.*.qty' => 'required|integer|min:1',
             'items.*.cost_price' => 'required|numeric|min:0',
             'items.*.selling_price' => 'required|numeric|min:0',
+            'foto_dokumen' => 'nullable|array',
+            'foto_dokumen.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         // Calculate totals
         $total = collect($validated['items'])->sum(fn($item) => $item['qty'] * $item['cost_price']);
         $totalSellingPrice = collect($validated['items'])->sum(fn($item) => $item['qty'] * $item['selling_price']);
+
+        // Handle foto_dokumen uploads
+        $fotoDokumenPaths = [];
+        if ($request->hasFile('foto_dokumen')) {
+            foreach ($request->file('foto_dokumen') as $file) {
+                $path = $file->store('pembelian-dokumen', 'public');
+                $fotoDokumenPaths[] = $path;
+            }
+        }
 
         // Create pembelian
         $pembelian = Pembelian::create([
@@ -137,6 +149,7 @@ class PembelianController extends Controller
             'tgl_tempo' => $validated['tgl_tempo'] ?? null,
             'total_amount' => $total,
             'total_selling_price' => $totalSellingPrice,
+            'foto_dokumen' => !empty($fotoDokumenPaths) ? $fotoDokumenPaths : null,
         ]);
 
         // Create items
@@ -223,11 +236,23 @@ class PembelianController extends Controller
             'items.*.qty' => 'required|integer|min:1',
             'items.*.cost_price' => 'required|numeric|min:0',
             'items.*.selling_price' => 'required|numeric|min:0',
+            'foto_dokumen' => 'nullable|array',
+            'foto_dokumen.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'existing_foto_dokumen' => 'nullable|array',
         ]);
 
         // Calculate totals
         $total = collect($validated['items'])->sum(fn($item) => $item['qty'] * $item['cost_price']);
         $totalSellingPrice = collect($validated['items'])->sum(fn($item) => $item['qty'] * $item['selling_price']);
+
+        // Handle foto_dokumen uploads and existing
+        $fotoDokumenPaths = $validated['existing_foto_dokumen'] ?? [];
+        if ($request->hasFile('foto_dokumen')) {
+            foreach ($request->file('foto_dokumen') as $file) {
+                $path = $file->store('pembelian-dokumen', 'public');
+                $fotoDokumenPaths[] = $path;
+            }
+        }
 
         // Update pembelian
         $pembelian->update([
@@ -241,6 +266,7 @@ class PembelianController extends Controller
             'tgl_tempo' => $validated['tgl_tempo'] ?? null,
             'total_amount' => $total,
             'total_selling_price' => $totalSellingPrice,
+            'foto_dokumen' => !empty($fotoDokumenPaths) ? $fotoDokumenPaths : null,
         ]);
 
         // Sync items

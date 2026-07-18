@@ -139,12 +139,23 @@ class ProdukController extends Controller
         $search = $request->query('q', '');
         $limit = min((int) $request->query('limit', 50), 100);
         $inStockOnly = filter_var($request->query('in_stock', false), FILTER_VALIDATE_BOOLEAN);
+        $excludeIds = array_filter(explode(',', $request->query('exclude_ids', '')));
 
         $fk = PembelianItem::productForeignKey();
         $qtySisa = PembelianItem::qtySisaColumn();
         $stockSub = "COALESCE((SELECT SUM(pi.`{$qtySisa}`) FROM tb_pembelian_item pi WHERE pi.`{$fk}` = md_produk.id), 0)";
 
         $produks = Produk::select(['md_produk.*', DB::raw("({$stockSub}) as stok_on_hand")])
+            ->addSelect([
+                'last_cost_price' => PembelianItem::select('cost_price')
+                    ->whereColumn(PembelianItem::productForeignKey(), 'md_produk.id')
+                    ->orderBy('id_pembelian_item', 'desc')
+                    ->limit(1),
+                'last_selling_price' => PembelianItem::select('selling_price')
+                    ->whereColumn(PembelianItem::productForeignKey(), 'md_produk.id')
+                    ->orderBy('id_pembelian_item', 'desc')
+                    ->limit(1),
+            ])
             ->with(['brand', 'kategori', 'primaryImage'])
             ->when($inStockOnly, function ($query) use ($stockSub) {
                 $query->whereRaw("({$stockSub}) > 0");
@@ -161,6 +172,9 @@ class ProdukController extends Controller
             ->when($request->query('kategori_id'), function ($query, $kategoriId) {
                 $query->where('kategori_id', $kategoriId);
             })
+            ->when(!empty($excludeIds), function ($query) use ($excludeIds) {
+                $query->whereNotIn('id', $excludeIds);
+            })
             ->orderBy('nama_produk')
             ->limit($limit)
             ->get();
@@ -174,6 +188,8 @@ class ProdukController extends Controller
                 'kategori' => $produk->kategori ? ['id' => $produk->kategori->id, 'nama_kategori' => $produk->kategori->nama_kategori] : null,
                 'image_url' => $produk->primaryImage?->url ?? $produk->image_url,
                 'stok_on_hand' => (int) $produk->stok_on_hand,
+                'last_cost_price' => $produk->last_cost_price ? (float) $produk->last_cost_price : null,
+                'last_selling_price' => $produk->last_selling_price ? (float) $produk->last_selling_price : null,
             ];
         }));
     }

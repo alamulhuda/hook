@@ -31,6 +31,7 @@ interface Props {
     class?: string
     endpoint?: string
     inStockOnly?: boolean
+    excludeIds?: number[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -117,7 +118,12 @@ function fetchOptions(query: string) {
         loading.value = true
         try {
             const { data } = await api.get(props.endpoint, {
-                params: { q: query, limit: 50, in_stock: props.inStockOnly ? 1 : undefined },
+                params: { 
+                    q: query, 
+                    limit: 50, 
+                    in_stock: props.inStockOnly ? 1 : undefined,
+                    exclude_ids: props.excludeIds ? props.excludeIds.join(',') : undefined
+                },
             })
             options.value = data
         } catch (e) {
