@@ -63,7 +63,7 @@ class PenjualanController extends Controller
             'karyawans' => Karyawan::orderBy('nama_karyawan')->get(['id', 'nama_karyawan']),
             'gudangs' => Gudang::orderBy('nama_gudang')->get(['id', 'nama_gudang']),
             'produks' => Produk::with(['brand', 'kategori'])->orderBy('nama_produk')->get(['id', 'nama_produk', 'sku']),
-            'paymentAccounts' => AkunTransaksi::where('jenis', 'kas')->orWhere('jenis', 'bank')->orderBy('nama_akun')->get(['id', 'kode_akun', 'nama_akun', 'jenis']),
+            'paymentAccounts' => AkunTransaksi::where('is_active', true)->orderBy('nama_akun')->get(['id', 'kode_akun', 'nama_akun', 'jenis']),
             'metodeBayarOptions' => [
                 ['value' => 'cash', 'label' => 'Cash'],
                 ['value' => 'card', 'label' => 'Kartu'],
@@ -88,8 +88,7 @@ class PenjualanController extends Controller
             ->get(['id', 'nama_produk', 'sku']);
 
         // Get payment accounts for payments
-        $paymentAccounts = AkunTransaksi::where('jenis', 'kas')
-            ->orWhere('jenis', 'bank')
+        $paymentAccounts = AkunTransaksi::where('is_active', true)
             ->orderBy('nama_akun')
             ->get(['id', 'kode_akun', 'nama_akun', 'jenis']);
 

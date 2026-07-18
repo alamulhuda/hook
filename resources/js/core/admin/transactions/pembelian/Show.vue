@@ -6,7 +6,7 @@ import PageHeader from '@/components/layout/PageHeader.vue'
 import Button from '@/components/ui/button.vue'
 import Card from '@/components/ui/card.vue'
 import Badge from '@/components/ui/badge.vue'
-import { ArrowLeft, Printer, Pencil, Trash2, Package, Truck } from 'lucide-vue-next'
+import { ArrowLeft, Printer, Pencil, Trash2, Package, Truck, Image as ImageIcon } from 'lucide-vue-next'
 
 const page = usePage()
 
@@ -123,6 +123,21 @@ function deletePembelian() {
                     <Card v-if="pembelian?.catatan" class="p-6">
                         <h3 class="font-semibold mb-2">Notes</h3>
                         <p class="text-muted-foreground">{{ pembelian.catatan }}</p>
+                    </Card>
+
+                    <!-- Foto Dokumen -->
+                    <Card v-if="pembelian?.foto_dokumen && pembelian.foto_dokumen.length > 0" class="p-6">
+                        <h3 class="font-semibold mb-4 flex items-center gap-2">
+                            <ImageIcon class="h-5 w-5" />
+                            Foto Dokumen (Nota/Kwitansi)
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                            <div v-for="path in pembelian.foto_dokumen" :key="path" class="border rounded-lg overflow-hidden h-24 bg-muted flex items-center justify-center">
+                                <a :href="`/storage/${path}`" target="_blank" class="w-full h-full block">
+                                    <img :src="`/storage/${path}`" class="object-cover w-full h-full hover:scale-105 transition-transform" />
+                                </a>
+                            </div>
+                        </div>
                     </Card>
                 </div>
                 

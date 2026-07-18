@@ -6,9 +6,10 @@ import PageHeader from '@/components/layout/PageHeader.vue'
 import Button from '@/components/ui/button.vue'
 import Input from '@/components/ui/input.vue'
 import Card from '@/components/ui/card.vue'
-import { ArrowLeft, Plus, Trash2, Package, Save } from 'lucide-vue-next'
+import { ArrowLeft, Plus, Trash2, Package, Save, Image as ImageIcon } from 'lucide-vue-next'
 import ProdukSelect, { type ProdukOption } from '@/components/forms/ProdukSelect.vue'
 import RelationSelect, { type SelectOption } from '@/components/forms/RelationSelect.vue'
+import MultiImageUpload from '@/components/ui/MultiImageUpload.vue'
 
 const page = usePage()
 
@@ -57,7 +58,13 @@ const form = ref({
         cost_price: item.cost_price || 0,
         selling_price: item.selling_price || 0,
     })) as ItemRow[],
+    foto_dokumen: [] as File[],
+    existing_foto_dokumen: (pembelian.value?.foto_dokumen || []) as string[],
 })
+
+function removeExistingFoto(index: number) {
+    form.value.existing_foto_dokumen.splice(index, 1)
+}
 
 const errors = ref<Record<string, string>>({})
 
@@ -116,24 +123,35 @@ function submit() {
         return
     }
     
-    router.put(`/app/admin/transactions/pembelian/${pembelian.value.id_pembelian}`, {
-        tanggal: form.value.tanggal,
-        id_supplier: form.value.id_supplier,
-        id_karyawan: form.value.id_karyawan,
-        nota_supplier: form.value.nota_supplier,
-        catatan: form.value.catatan,
-        tipe_pembelian: form.value.tipe_pembelian,
-        jenis_pembayaran: form.value.jenis_pembayaran,
-        akun_transaksi_id: form.value.jenis_pembayaran === 'lunas' ? form.value.akun_transaksi_id : null,
-        tgl_tempo: form.value.jenis_pembayaran === 'tempo' ? (form.value.tgl_tempo || null) : null,
-        items: form.value.items.map(item => ({
-            id: item.id,
-            id_produk: item.id_produk,
-            qty: item.qty,
-            cost_price: item.cost_price,
-            selling_price: item.selling_price,
-        })),
-    }, {
+    const formData = new FormData()
+    formData.append('_method', 'PUT')
+    formData.append('tanggal', form.value.tanggal)
+    if (form.value.id_supplier) formData.append('id_supplier', String(form.value.id_supplier))
+    if (form.value.id_karyawan) formData.append('id_karyawan', String(form.value.id_karyawan))
+    if (form.value.nota_supplier) formData.append('nota_supplier', form.value.nota_supplier)
+    if (form.value.catatan) formData.append('catatan', form.value.catatan)
+    if (form.value.tipe_pembelian) formData.append('tipe_pembelian', form.value.tipe_pembelian)
+    if (form.value.jenis_pembayaran) formData.append('jenis_pembayaran', form.value.jenis_pembayaran)
+    if (form.value.akun_transaksi_id) formData.append('akun_transaksi_id', String(form.value.akun_transaksi_id))
+    if (form.value.tgl_tempo) formData.append('tgl_tempo', form.value.tgl_tempo)
+
+    form.value.items.forEach((item, index) => {
+        if (item.id) formData.append(`items[${index}][id]`, String(item.id))
+        formData.append(`items[${index}][id_produk]`, String(item.id_produk))
+        formData.append(`items[${index}][qty]`, String(item.qty))
+        formData.append(`items[${index}][cost_price]`, String(item.cost_price))
+        formData.append(`items[${index}][selling_price]`, String(item.selling_price))
+    })
+
+    form.value.existing_foto_dokumen.forEach((path, index) => {
+        formData.append(`existing_foto_dokumen[${index}]`, path)
+    })
+
+    form.value.foto_dokumen.forEach((file, index) => {
+        formData.append(`foto_dokumen[${index}]`, file)
+    })
+    
+    router.post(`/app/admin/transactions/pembelian/${pembelian.value.id_pembelian}`, formData, {
         onError: (err) => {
             errors.value = err
         },
@@ -257,6 +275,36 @@ function submit() {
                                 v-model="form.catatan"
                                 class="w-full h-24 rounded-md border border-input bg-background px-3 py-2 text-sm"
                                 placeholder="Add notes..."
+                            />
+                        </Card>
+
+                        <!-- Foto Dokumen -->
+                        <Card class="p-6">
+                            <div class="flex items-center gap-2 mb-4">
+                                <ImageIcon class="h-5 w-5" />
+                                <h3 class="font-semibold">Foto Dokumen (Nota/Kwitansi)</h3>
+                            </div>
+                            
+                            <!-- Existing files -->
+                            <div v-if="form.existing_foto_dokumen.length > 0" class="grid grid-cols-2 gap-4 mb-4 md:grid-cols-4">
+                                <div v-for="(path, idx) in form.existing_foto_dokumen" :key="path" class="relative group border rounded-lg overflow-hidden h-24 bg-muted flex items-center justify-center">
+                                    <a :href="`/storage/${path}`" target="_blank" class="w-full h-full block">
+                                        <img :src="`/storage/${path}`" class="object-cover w-full h-full" />
+                                    </a>
+                                    <button
+                                        type="button"
+                                        class="absolute top-1 right-1 p-1 bg-destructive text-destructive-foreground rounded-full opacity-90 hover:opacity-100 transition-opacity"
+                                        @click="removeExistingFoto(idx)"
+                                    >
+                                        <Trash2 class="h-4 w-4" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <MultiImageUpload
+                                v-model="form.foto_dokumen"
+                                :max-files="5"
+                                helper-text="Upload receipts or documents (max 5 files)"
                             />
                         </Card>
                     </div>

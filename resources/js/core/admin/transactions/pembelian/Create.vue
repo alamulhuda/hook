@@ -16,6 +16,7 @@ const page = usePage()
 
 const suppliers = computed(() => page.props.suppliers || [])
 const jenisPembayaranOptions = computed(() => page.props.jenisPembayaranOptions || [])
+const paymentAccounts = computed(() => page.props.paymentAccounts || [])
 
 const supplierOptions = ref<SelectOption[]>(
     (suppliers.value as any[]).map((s) => ({

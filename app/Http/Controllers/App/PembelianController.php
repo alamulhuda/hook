@@ -65,7 +65,7 @@ class PembelianController extends Controller
             'suppliers' => Supplier::orderBy('nama_supplier')->get(['id', 'nama_supplier']),
             'karyawans' => Karyawan::orderBy('nama_karyawan')->get(['id', 'nama_karyawan']),
             'produks' => Produk::with(['brand', 'kategori'])->orderBy('nama_produk')->get(['id', 'nama_produk', 'sku']),
-            'paymentAccounts' => AkunTransaksi::where('jenis', 'kas')->orWhere('jenis', 'bank')->orderBy('nama_akun')->get(['id', 'kode_akun', 'nama_akun', 'jenis']),
+            'paymentAccounts' => AkunTransaksi::where('is_active', true)->orderBy('nama_akun')->get(['id', 'kode_akun', 'nama_akun', 'jenis']),
             'jenisPembayaranOptions' => [
                 ['value' => 'lunas', 'label' => 'Lunas (Cash)'],
                 ['value' => 'tempo', 'label' => 'Tempo (Kredit)'],
@@ -85,8 +85,7 @@ class PembelianController extends Controller
             ->orderBy('nama_produk')
             ->get(['id', 'nama_produk', 'sku']);
 
-        $paymentAccounts = AkunTransaksi::where('jenis', 'kas')
-            ->orWhere('jenis', 'bank')
+        $paymentAccounts = AkunTransaksi::where('is_active', true)
             ->orderBy('nama_akun')
             ->get(['id', 'kode_akun', 'nama_akun', 'jenis']);
 
@@ -211,8 +210,7 @@ class PembelianController extends Controller
             ->orderBy('nama_produk')
             ->get(['id', 'nama_produk', 'sku']);
 
-        $paymentAccounts = AkunTransaksi::where('jenis', 'kas')
-            ->orWhere('jenis', 'bank')
+        $paymentAccounts = AkunTransaksi::where('is_active', true)
             ->orderBy('nama_akun')
             ->get(['id', 'kode_akun', 'nama_akun', 'jenis']);
 
