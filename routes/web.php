@@ -133,7 +133,9 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
     // Akunting routes moved to Modules\Akunting (app/Modules/Akunting/routes.php)
     // URL prefix: /app/modules/akunting/
 
-    Route::get('/settings', function () { return Inertia::render('core/settings/Index'); })->name('app.settings');
+    Route::get('/settings', [\App\Http\Controllers\App\SettingController::class, 'index'])->name('app.settings');
+    Route::put('/settings', [\App\Http\Controllers\App\SettingController::class, 'update'])->name('app.settings.update');
+    Route::get('/settings/company-profile', function () { return \Inertia\Inertia::render('core/settings/CompanyProfile'); })->name('app.settings.company-profile');
     
     // Module Management
     Route::get('/settings/modules', [ModuleManagementController::class, 'index'])->name('app.settings.modules');

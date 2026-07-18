@@ -38,6 +38,9 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'enabled_modules' => app(\App\Services\ModuleRegistryService::class)->getEnabledModuleIds(),
+            'settings' => [
+                'general' => app(\App\Services\SettingService::class)->getGroup('general'),
+            ],
         ];
     }
 }

@@ -75,7 +75,9 @@ class Penjualan extends Model
             $model->sumber_transaksi = $model->sumber_transaksi ?? 'manual';
 
             if (empty($model->no_nota)) {
-                $prefix = $model->sumber_transaksi === 'pos' ? 'POS' : 'PJ';
+                $prefix = $model->sumber_transaksi === 'pos'
+                    ? app(\App\Services\SettingService::class)->get('transaction_prefix', 'sales_pos', 'POS')
+                    : app(\App\Services\SettingService::class)->get('transaction_prefix', 'sales_manual', 'PJ');
                 $model->no_nota = static::generateNoNota($prefix);
             }
         });

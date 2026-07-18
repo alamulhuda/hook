@@ -138,7 +138,8 @@ class TukarTambah extends Model
     public static function generateNoNota(): string
     {
         $date = now()->format('Ym');
-        $prefix = 'TT-' . $date . '-';
+        $prefixCode = app(\App\Services\SettingService::class)->get('transaction_prefix', 'trade_in', 'TT');
+        $prefix = $prefixCode . '-' . $date . '-';
 
         $latest = static::where('no_nota', 'like', $prefix . '%')
             ->orderBy('no_nota', 'desc')

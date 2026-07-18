@@ -85,7 +85,8 @@ class Pembelian extends Model
     {
         return \Illuminate\Support\Facades\DB::transaction(function () {
             $date = now()->format('Ym');
-            $prefix = 'PO-' . $date . '-';
+            $prefixCode = app(\App\Services\SettingService::class)->get('transaction_prefix', 'purchase_order', 'PO');
+            $prefix = $prefixCode . '-' . $date . '-';
 
             $latest = self::withTrashed()
                 ->where('no_po', 'like', $prefix . '%')

@@ -202,7 +202,7 @@ const subNavigation: Record<string, NavItem[]> = {
     'settings': [
         { label: 'General Settings', icon: Cog,              href: '/app/settings' },
         { label: 'Bank Accounts',    icon: Building2,        href: '/app/admin/master-data/akun-transaksi' },
-        { label: 'Company Profile',  icon: Building2,        href: '#',                        badge: 'Soon' },
+        { label: 'Company Profile',  icon: Building2,        href: '/app/settings/company-profile' },
         { label: 'Tax',              icon: Calculator,       href: '#',                        badge: 'Soon' },
         // User & Access Management (nested under Settings — ERP standard)
         { label: 'Users',            icon: Users,            href: '/app/admin/users' },
