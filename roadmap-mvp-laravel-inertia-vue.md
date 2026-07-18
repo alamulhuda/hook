@@ -5,14 +5,14 @@
 
 ---
 
-## Fase 0 — Persiapan (1 hari)
+### Fase 0 — Persiapan (1 hari)
 
 **Tujuan:** environment siap, tidak ada blocker teknis di tengah jalan.
 
-- [ ] Tentukan scope MVP secara tertulis — 1 halaman: fitur wajib vs fitur "nanti"
-- [ ] Siapkan repo Git (branch `main` + `dev`)
-- [ ] Siapkan local environment: PHP 8.2, Composer, Node 20+, MySQL 8, Redis (bisa via Docker Compose dari awal biar konsisten dengan production nanti)
-- [ ] Install Laravel 12 baru → pilih starter kit **Laravel Breeze (Inertia + Vue)** sebagai base auth, jangan bikin auth dari nol
+- [x] Tentukan scope MVP secara tertulis — 1 halaman: fitur wajib vs fitur "nanti"
+- [x] Siapkan repo Git (branch `main` + `dev`)
+- [x] Siapkan local environment: PHP 8.2, Composer, Node 20+, MySQL 8, Redis (bisa via Docker Compose dari awal biar konsisten dengan production nanti)
+- [x] Install Laravel 12 baru → pilih starter kit **Laravel Breeze (Inertia + Vue)** sebagai base auth, jangan bikin auth dari nol
 
 ```bash
 composer create-project laravel/laravel nama-app
@@ -21,7 +21,7 @@ composer require laravel/breeze --dev
 php artisan breeze:install vue
 ```
 
-- [ ] Commit awal ("initial scaffold")
+- [x] Commit awal ("initial scaffold")
 
 ---
 
@@ -29,7 +29,7 @@ php artisan breeze:install vue
 
 **Tujuan:** fondasi yang tidak perlu dibongkar lagi saat fitur bertambah.
 
-- [ ] Tentukan struktur folder frontend:
+- [x] Tentukan struktur folder frontend:
   ```
   resources/js/
     Pages/          → 1 file per route Inertia
@@ -37,10 +37,10 @@ php artisan breeze:install vue
     Components/     → komponen reusable (Button, Table, Modal, dst)
     Composables/     → logic reusable (useForm helpers, usePagination, dst)
   ```
-- [ ] Setup **shadcn-vue** atau komponen Tailwind custom sebagai design system dasar — jangan bikin styling dari nol tiap komponen
-- [ ] Setup **Pinia** untuk state global (misalnya auth user, notifikasi, sidebar toggle) — hanya jika benar-benar perlu, jangan taruh semua state di Pinia
-- [ ] Setup **VeeValidate + Zod** untuk validasi form di frontend (opsional untuk MVP awal, bisa pakai validasi Laravel dulu via Inertia errors)
-- [ ] Definisikan konvensi:
+- [x] Setup **shadcn-vue** atau komponen Tailwind custom sebagai design system dasar — jangan bikin styling dari nol tiap komponen
+- [x] Setup **Pinia** untuk state global (misalnya auth user, notifikasi, sidebar toggle) — hanya jika benar-benar perlu, jangan taruh semua state di Pinia
+- [x] Setup **VeeValidate + Zod** untuk validasi form di frontend (opsional untuk MVP awal, bisa pakai validasi Laravel dulu via Inertia errors)
+- [x] Definisikan konvensi:
   - Controller → Resource Controller pattern
   - Response ke Inertia selalu pakai `Inertia::render()`, hindari logic berat di controller (pindahkan ke Service/Action class)
   - Naming: `Pages/Products/Index.vue`, `Pages/Products/Create.vue`, dst — 1:1 dengan route Laravel
@@ -51,11 +51,11 @@ php artisan breeze:install vue
 
 ## Fase 2 — Core Backend: Auth, Role, Model Utama (2–4 hari)
 
-- [ ] Sesuaikan tabel `users` (tambah field yang dibutuhkan: role, status, dll)
-- [ ] Setup role/permission — kalau MVP sederhana cukup kolom `role` enum, kalau butuh granular pakai **spatie/laravel-permission**
-- [ ] Buat migration + model untuk entitas inti (misal: Product, Order, Customer — sesuaikan domain)
-- [ ] Buat Factory + Seeder untuk data dummy (WAJIB — biar bisa develop UI tanpa nunggu data asli)
-- [ ] Middleware dasar: auth, role check, redirect unauthenticated ke login
+- [x] Sesuaikan tabel `users` (tambah field yang dibutuhkan: role, status, dll)
+- [x] Setup role/permission — kalau MVP sederhana cukup kolom `role` enum, kalau butuh granular pakai **spatie/laravel-permission**
+- [x] Buat migration + model untuk entitas inti (misal: Product, Order, Customer — sesuaikan domain)
+- [x] Buat Factory + Seeder untuk data dummy (WAJIB — biar bisa develop UI tanpa nunggu data asli)
+- [x] Middleware dasar: auth, role check, redirect unauthenticated ke login
 
 **Checkpoint:** `php artisan migrate:fresh --seed` jalan bersih, bisa login dengan user dummy.
 
@@ -65,15 +65,15 @@ php artisan breeze:install vue
 
 Ini fase yang paling menentukan "rasa" aplikasi, kerjakan sebelum fitur detail.
 
-- [ ] Layout dashboard: sidebar + topbar + content area (pakai `AuthenticatedLayout` dari Breeze sebagai basis, modifikasi)
-- [ ] Sidebar navigasi dinamis (bisa collapse, active state sesuai route)
-- [ ] Breadcrumb komponen
-- [ ] Komponen umum yang dipakai berulang, siapkan lebih dulu:
+- [x] Layout dashboard: sidebar + topbar + content area (pakai `AuthenticatedLayout` dari Breeze sebagai basis, modifikasi)
+- [x] Sidebar navigasi dinamis (bisa collapse, active state sesuai route)
+- [x] Breadcrumb komponen (sudah didesain, lalu dinonaktifkan secara global di Vue)
+- [x] Komponen umum yang dipakai berulang, siapkan lebih dulu:
   - Table (dengan sorting, pagination — pertimbangkan **TanStack Table** kalau butuh fitur kompleks)
   - Modal / Dialog
   - Toast/notification
   - Empty state, loading state, skeleton
-- [ ] Halaman dashboard utama (widget/summary card) — bisa pakai data dummy dulu
+- [x] Halaman dashboard utama (widget/summary card) — bisa pakai data dummy dulu
 
 **Checkpoint:** navigasi antar halaman mulus, layout konsisten, tidak ada flash/flicker (manfaatkan Inertia persistent layout).
 
@@ -90,10 +90,10 @@ Per modul, urutan kerja yang efisien untuk "vibe coding":
 4. Page Vue: Create/Edit (form)
 5. Test manual langsung di browser sebelum lanjut modul lain
 
-- [ ] Modul 1: __________
-- [ ] Modul 2: __________
-- [ ] Modul 3: __________
-- [ ] Relasi antar modul (misal Order → Product) — pastikan foreign key & UI-nya konsisten
+- [x] Modul 1: Master Data (Produk, Brand, Kategori, Supplier, Member, Jasa, Gudang, AkunTransaksi)
+- [/] Modul 2: Transaksi Penjualan & Pembelian (Penjualan index/create/show selesai, Pembelian/Payment pending)
+- [/] Modul 3: Modul Karyawan & Absensi (Karyawan model & integrasi absensi dasar selesai)
+- [x] Relasi antar modul (misal Order → Product) — pastikan foreign key & UI-nya konsisten
 
 **Tips vibe coding tetap rapi:**
 - Jangan skip Form Request validation walau buru-buru — ini sering jadi sumber bug production
@@ -104,33 +104,33 @@ Per modul, urutan kerja yang efisien untuk "vibe coding":
 
 ## Fase 5 — Polishing UX (2–4 hari)
 
-- [ ] Loading state di semua form submit (pakai `Inertia.js` progress indicator / `router.visit` events)
-- [ ] Error handling: 404, 403, 500 custom page
-- [ ] Konfirmasi delete (modal, bukan langsung hapus)
-- [ ] Flash message sukses/gagal konsisten di semua aksi
-- [ ] Responsive check — minimal tablet & mobile untuk halaman yang sering diakses dari HP
-- [ ] Dark mode (opsional, skip kalau MVP mengejar waktu)
+- [x] Loading state di semua form submit (pakai `Inertia.js` progress indicator / `router.visit` events)
+- [x] Error handling: 404, 403, 500 custom page
+- [x] Konfirmasi delete (modal, bukan langsung hapus)
+- [x] Flash message sukses/gagal konsisten di semua aksi
+- [x] Responsive check — minimal tablet & mobile untuk halaman yang sering diakses dari HP
+- [x] Dark mode (opsional, skip kalau MVP mengejar waktu)
 
 ---
 
 ## Fase 6 — Testing & QA (2–3 hari)
 
-- [ ] Feature test untuk flow kritis (login, CRUD modul utama) pakai Pest/PHPUnit
+- [x] Feature test untuk flow kritis (login, CRUD modul utama) pakai Pest/PHPUnit
 - [ ] Cek N+1 query — pakai `Laravel Debugbar` atau `Telescope` selama development, **matikan di production**
-- [ ] Cek validasi form — coba input invalid, cek pesan error jelas
-- [ ] Cek authorization — user tanpa akses tidak bisa akses route/data orang lain
-- [ ] Review `.env.example` — pastikan semua env var yang dibutuhkan terdaftar
+- [x] Cek validasi form — coba input invalid, cek pesan error jelas
+- [x] Cek authorization — user tanpa akses tidak bisa akses route/data orang lain
+- [x] Review `.env.example` — pastikan semua env var yang dibutuhkan terdaftar
 
 ---
 
 ## Fase 7 — Optimisasi Sebelum Deploy (1–2 hari)
 
-- [ ] `php artisan optimize` (config, route, view cache)
-- [ ] Build frontend production: `npm run build`
-- [ ] Setup **Redis** untuk cache & session (bukan file-based) — sudah biasa dipakai, tinggal pastikan config `.env` benar
-- [ ] Queue untuk job berat (kirim email, generate report) — pakai `database` atau `redis` driver, jalankan `queue:work` via supervisor/systemd
-- [ ] Compress asset image, cek bundle size frontend (`npm run build -- --report` kalau pakai Vite bundle analyzer)
-- [ ] Set `APP_DEBUG=false`, `APP_ENV=production` di env production
+- [x] `php artisan optimize` (config, route, view cache)
+- [x] Build frontend production: `npm run build`
+- [x] Setup **Redis** untuk cache & session (bukan file-based) — sudah biasa dipakai, tinggal pastikan config `.env` benar
+- [x] Queue untuk job berat (kirim email, generate report) — pakai `database` atau `redis` driver, jalankan `queue:work` via supervisor/systemd
+- [x] Compress asset image, cek bundle size frontend (`npm run build -- --report` kalau pakai Vite bundle analyzer)
+- [x] Set `APP_DEBUG=false`, `APP_ENV=production` di env production
 
 ---
 
@@ -138,13 +138,13 @@ Per modul, urutan kerja yang efisien untuk "vibe coding":
 
 Sesuai dengan setup yang biasa dipakai: Docker Compose + self-hosted (TrueNAS Scale) + Cloudflare Tunnel.
 
-- [ ] Dockerfile multi-stage (composer install → npm build → PHP-FPM image ramping)
-- [ ] `docker-compose.yml`: app (PHP-FPM), nginx, mysql, redis, queue worker sebagai service terpisah
-- [ ] Setup `.env` production — **hati-hati karakter `$` di password**, wrap pakai single quote atau escape
-- [ ] Migration production: `php artisan migrate --force` (jangan `migrate:fresh` di production!)
-- [ ] Setup Cloudflare Tunnel ke domain production
-- [ ] SSL otomatis via Cloudflare (mode Full/Full Strict)
-- [ ] Cek queue worker jalan sebagai service persistent (systemd/supervisor), bukan proses manual
+- [x] Dockerfile multi-stage (composer install → npm build → PHP-FPM image ramping)
+- [x] `docker-compose.yml`: app (PHP-FPM), nginx, mysql, redis, queue worker sebagai service terpisah
+- [x] Setup `.env` production — **hati-hati karakter `$` di password**, wrap pakai single quote or escape
+- [x] Migration production: `php artisan migrate --force` (jangan `migrate:fresh` di production!)
+- [x] Setup Cloudflare Tunnel ke domain production
+- [x] SSL otomatis via Cloudflare (mode Full/Full Strict)
+- [x] Cek queue worker jalan sebagai service persistent (systemd/supervisor), bukan proses manual
 
 **Checkpoint go-live:** aplikasi bisa diakses via domain publik, login jalan, data persist setelah restart container.
 

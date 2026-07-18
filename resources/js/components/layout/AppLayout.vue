@@ -27,7 +27,7 @@ provide('setHasSubNav', (val: boolean) => {
             )"
         >
             <AdminHeader />
-            <main class="flex-1 p-6">
+            <main class="flex-1">
                 <slot />
             </main>
         </div>
