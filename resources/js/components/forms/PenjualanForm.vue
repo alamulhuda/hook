@@ -17,6 +17,10 @@ const emit = defineEmits<{
 
 const page = usePage()
 
+const isWarehouseEnabled = computed(() => {
+    return (page.props.enabled_modules as string[] || []).includes('Warehouse')
+})
+
 const members = computed(() => page.props.members || [])
 const karyawans = computed(() => page.props.karyawans || [])
 const gudangs = computed(() => page.props.gudangs || [])
@@ -177,7 +181,7 @@ function submit() {
         tanggal_penjualan: form.value.tanggal_penjualan,
         id_member: form.value.id_member,
         id_karyawan: form.value.id_karyawan,
-        gudang_id: form.value.gudang_id,
+        gudang_id: isWarehouseEnabled.value ? form.value.gudang_id : null,
         catatan: form.value.catatan,
         diskon_total: form.value.diskon_total,
         items: form.value.items.map(item => ({
@@ -271,7 +275,7 @@ onMounted(() => {
                         />
                     </div>
                     
-                    <div>
+                    <div v-if="isWarehouseEnabled">
                         <label class="text-sm text-muted-foreground block mb-1">Warehouse</label>
                         <select
                             v-model="form.gudang_id"
