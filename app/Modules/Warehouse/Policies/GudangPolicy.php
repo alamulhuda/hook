@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Policies;
+namespace App\Modules\Warehouse\Policies;
 
 use App\Models\User;
-use App\Models\Gudang;
+use App\Modules\Warehouse\Models\Gudang;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class GudangPolicy

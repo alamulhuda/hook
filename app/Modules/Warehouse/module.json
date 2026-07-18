@@ -1,0 +1,17 @@
+{
+  "id": "Warehouse",
+  "name": "Warehouse Management",
+  "version": "1.0.0",
+  "publisher": "Hook ERP Core Team",
+  "description": "Modul manajemen gudang/warehouse, mengelola lokasi, koordinat peta, dan status operasional gudang.",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-07-18",
+      "changes": [
+        "Separated warehouse management into a dedicated self-contained module",
+        "Packed Gudang model, controller, policies, and routes"
+      ]
+    }
+  ]
+}

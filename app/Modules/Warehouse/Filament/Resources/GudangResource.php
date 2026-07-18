@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\MasterData;
+namespace App\Modules\Warehouse\Filament\Resources;
 
 use App\Filament\Resources\BaseResource;
-use App\Filament\Resources\MasterData\GudangResource\Pages;
-use App\Models\Gudang;
+use App\Modules\Warehouse\Filament\Resources\GudangResource\Pages;
+use App\Modules\Warehouse\Models\Gudang;
 use Dotswan\MapPicker\Fields\Map;
 use Dotswan\MapPicker\Infolists\MapEntry;
 use Filament\Forms;

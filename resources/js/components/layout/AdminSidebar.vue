@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, provide, onMounted } from 'vue'
+import { ref, computed, provide, onMounted, watch, inject } from 'vue'
 import { Link, router, usePage } from '@inertiajs/vue3'
 import { cn } from '@/lib/utils'
 import { getModuleNavItems } from '@/module-loader'
@@ -149,7 +149,7 @@ const subNavigation: Record<string, NavItem[]> = {
         { label: 'Products',         icon: Package,          href: '/app/admin/inventory/products' },
         { label: 'Categories',       icon: Layers,           href: '/app/admin/master-data/kategori' },
         { label: 'Brands',           icon: TrendingUp,       href: '/app/admin/master-data/brand' },
-        { label: 'Warehouses',       icon: Warehouse,        href: '/app/admin/master-data/gudang' },
+        { label: 'Warehouses',       icon: Warehouse,        href: '/app/modules/warehouse/gudang', module: 'Warehouse' },
         // Module: Inventory
         { label: 'Stock Adjustment', icon: PackageSearch,    href: '/app/modules/inventory/stock-adjustment', module: 'Inventory' },
         { label: 'Stock Opname',     icon: ClipboardList,    href: '/app/modules/inventory/stock-opname',     module: 'Inventory' },
@@ -226,7 +226,7 @@ function getActiveSectionFromPath(path: string): string {
     if (path.startsWith('/app/admin/transactions')) return 'sales'
     if (path.startsWith('/app/admin/master-data/member')) return 'sales'
     if (path.startsWith('/app/admin/transactions/pembelian') || path.startsWith('/app/admin/master-data/supplier')) return 'purchasing'
-    if (path.startsWith('/app/admin/inventory') || path.startsWith('/app/modules/inventory')) return 'inventory'
+    if (path.startsWith('/app/admin/inventory') || path.startsWith('/app/modules/inventory') || path.startsWith('/app/modules/warehouse')) return 'inventory'
     if (path.startsWith('/app/admin/master-data')) return 'inventory'
     if (path.startsWith('/app/modules/akunting')) return 'accounting'
     if (path.startsWith('/app/modules/service-repair')) return 'service'
@@ -299,6 +299,11 @@ const activeSubNavItems = computed(() => {
 const activeSectionLabel = computed(() => {
     return filteredMainNavigation.value.find(m => m.id === activeMainNav.value)?.label ?? ''
 })
+
+const setHasSubNav = inject<(val: boolean) => void>('setHasSubNav', () => {})
+watch(activeSubNavItems, (newItems) => {
+    setHasSubNav(newItems.length > 0)
+}, { immediate: true })
 </script>
 
 <template>

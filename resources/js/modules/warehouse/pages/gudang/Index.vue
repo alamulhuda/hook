@@ -141,13 +141,13 @@ function handleRowClick(gudang: Gudang) {
 
 function submitForm() {
     if (selectedGudang.value) {
-        form.put(`/app/admin/master-data/gudang/${selectedGudang.value.id}`, {
+        form.put(`/app/modules/warehouse/gudang/${selectedGudang.value.id}`, {
             onSuccess: () => {
                 closeFormModal()
             },
         })
     } else {
-        form.post('/app/admin/master-data/gudang', {
+        form.post('/app/modules/warehouse/gudang', {
             onSuccess: () => {
                 closeFormModal()
             },
@@ -159,7 +159,7 @@ function deleteGudang() {
     if (!selectedGudang.value) return
 
     isDeleting.value = true
-    form.delete(`/app/admin/master-data/gudang/${selectedGudang.value.id}`, {
+    form.delete(`/app/modules/warehouse/gudang/${selectedGudang.value.id}`, {
         onSuccess: () => {
             closeDeleteModal()
             isDeleting.value = false
@@ -178,7 +178,7 @@ function deleteGudang() {
                 title="Warehouses"
                 description="Manage your warehouses/storage locations."
                 :breadcrumbs="[
-                    { label: 'Master Data', href: '/app/admin/master-data' },
+                    { label: 'Inventory', href: '/app/admin/inventory/products' },
                     { label: 'Warehouses' },
                 ]"
             >

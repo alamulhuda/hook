@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\MasterData\GudangResource\Pages;
+namespace App\Modules\Warehouse\Filament\Resources\GudangResource\Pages;
 
-use App\Filament\Resources\MasterData\GudangResource;
+use App\Modules\Warehouse\Filament\Resources\GudangResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 

@@ -10,7 +10,7 @@ use App\Models\PenjualanPembayaran;
 use App\Models\Member;
 use App\Models\Produk;
 use App\Models\Karyawan;
-use App\Models\Gudang;
+use App\Modules\Warehouse\Models\Gudang;
 use App\Models\AkunTransaksi;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

@@ -7,7 +7,7 @@ use App\Models\StockOpname;
 use App\Models\StockOpnameItem;
 use App\Models\Produk;
 use App\Models\PembelianItem;
-use App\Models\Gudang;
+use App\Modules\Warehouse\Models\Gudang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

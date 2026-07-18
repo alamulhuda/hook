@@ -5,7 +5,6 @@ use App\Filament\Pages\AppDashboard;
 use App\Http\Controllers\App\AkunTransaksiController;
 use App\Http\Controllers\App\BrandController;
 use App\Http\Controllers\App\DashboardController;
-use App\Http\Controllers\App\GudangController;
 use App\Http\Controllers\App\JasaController;
 use App\Http\Controllers\App\MemberController;
 use App\Http\Controllers\App\ProdukController;
@@ -117,11 +116,6 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
             Route::post('/jasa', [JasaController::class, 'store'])->name('app.jasa.store');
             Route::put('/jasa/{jasa}', [JasaController::class, 'update'])->name('app.jasa.update');
             Route::delete('/jasa/{jasa}', [JasaController::class, 'destroy'])->name('app.jasa.destroy');
-            
-            Route::get('/gudang', [GudangController::class, 'index'])->name('app.gudang');
-            Route::post('/gudang', [GudangController::class, 'store'])->name('app.gudang.store');
-            Route::put('/gudang/{gudang}', [GudangController::class, 'update'])->name('app.gudang.update');
-            Route::delete('/gudang/{gudang}', [GudangController::class, 'destroy'])->name('app.gudang.destroy');
             
             Route::get('/akun-transaksi', [AkunTransaksiController::class, 'index'])->name('app.akun-transaksi');
             Route::post('/akun-transaksi', [AkunTransaksiController::class, 'store'])->name('app.akun-transaksi.store');

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
-use App\Models\Gudang;
+use App\Modules\Warehouse\Models\Gudang;
 use App\Models\Brand;
 use App\Models\Kategori;
 use App\Models\PembelianItem;

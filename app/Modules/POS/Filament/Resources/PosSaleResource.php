@@ -5,7 +5,7 @@ namespace App\Modules\POS\Filament\Resources;
 use Filament\Forms;
 use App\Models\Jasa;
 use Filament\Tables;
-use App\Models\Gudang;
+use App\Modules\Warehouse\Models\Gudang;
 use App\Models\Member;
 use App\Models\Produk;
 use Filament\Forms\Get;

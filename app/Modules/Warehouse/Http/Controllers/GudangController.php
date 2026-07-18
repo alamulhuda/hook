@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\App;
+namespace App\Modules\Warehouse\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Gudang;
+use App\Modules\Warehouse\Models\Gudang;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,7 +12,7 @@ class GudangController extends Controller
     public function index()
     {
         $gudang = Gudang::all();
-        return Inertia::render('modules/inventory/pages/master-data/gudang/Index', [
+        return Inertia::render('modules/warehouse/pages/gudang/Index', [
             'gudang' => $gudang,
             'user' => auth()->user(),
         ]);
