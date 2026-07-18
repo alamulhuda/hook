@@ -22,6 +22,7 @@ class AkunTransaksiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'kode_akun' => 'nullable|string|max:255|unique:akun_transaksis,kode_akun',
             'nama_akun' => 'required|string|max:255',
             'nama_bank' => 'nullable|string|max:255',
             'nama_rekening' => 'nullable|string|max:255',
@@ -30,16 +31,18 @@ class AkunTransaksiController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-        $lastKode = AkunTransaksi::query()
-            ->whereNotNull('kode_akun')
-            ->orderByDesc('kode_akun')
-            ->value('kode_akun');
+        if (empty($validated['kode_akun'])) {
+            $lastKode = AkunTransaksi::query()
+                ->where('kode_akun', 'like', '111%')
+                ->orderByDesc('kode_akun')
+                ->value('kode_akun');
 
-        $nextNumber = 1;
-        if ($lastKode && preg_match('/(\d+)$/', $lastKode, $matches)) {
-            $nextNumber = ((int) $matches[1]) + 1;
+            $nextNumber = 1;
+            if ($lastKode && preg_match('/(\d+)$/', $lastKode, $matches)) {
+                $nextNumber = ((int) substr($matches[1], -3)) + 1;
+            }
+            $validated['kode_akun'] = '111' . str_pad((string) $nextNumber, 3, '0', STR_PAD_LEFT);
         }
-        $validated['kode_akun'] = 'AKN' . str_pad((string) $nextNumber, 4, '0', STR_PAD_LEFT);
 
         AkunTransaksi::create($validated);
         return redirect()->back()->with('success', 'Akun Transaksi created successfully');
@@ -48,6 +51,7 @@ class AkunTransaksiController extends Controller
     public function update(Request $request, AkunTransaksi $akunTransaksi)
     {
         $validated = $request->validate([
+            'kode_akun' => 'required|string|max:255|unique:akun_transaksis,kode_akun,' . $akunTransaksi->id,
             'nama_akun' => 'required|string|max:255',
             'nama_bank' => 'nullable|string|max:255',
             'nama_rekening' => 'nullable|string|max:255',

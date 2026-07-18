@@ -69,6 +69,7 @@ const showDeleteModal = ref(false)
 const selectedAkun = ref<AkunTransaksi | null>(null)
 
 const form = useForm({
+    kode_akun: '',
     nama_akun: '',
     nama_bank: '',
     nama_rekening: '',
@@ -83,6 +84,7 @@ const columns = [
     { key: 'nama_bank', label: 'Bank', sortable: false },
     { key: 'no_rekening', label: 'Account No.', sortable: false },
     { key: 'is_active', label: 'Status', sortable: true },
+    { key: 'actions', label: '' },
 ]
 
 function openCreateModal() {
@@ -94,6 +96,7 @@ function openCreateModal() {
 
 function openEditModal(akun: AkunTransaksi) {
     selectedAkun.value = akun
+    form.kode_akun = akun.kode_akun
     form.nama_akun = akun.nama_akun
     form.nama_bank = akun.nama_bank || ''
     form.nama_rekening = akun.nama_rekening || ''
@@ -209,12 +212,12 @@ function deleteAkun() {
                     @page-change="handlePageChange"
                     @row-click="handleRowClick"
                 >
-                    <template #is_active="{ row }">
+                    <template #cell:is_active="{ row }">
                         <Badge :variant="row.is_active ? 'default' : 'secondary'">
                             {{ row.is_active ? 'Active' : 'Inactive' }}
                         </Badge>
                     </template>
-                    <template #actions="{ row }">
+                    <template #cell:actions="{ row }">
                         <div class="flex items-center gap-2">
                             <Button
                                 variant="ghost"
@@ -234,12 +237,6 @@ function deleteAkun() {
                     </template>
                 </DataTable>
 
-                <div
-                    v-if="filteredAkun.length === 0 && !isLoading"
-                    class="text-center py-8 text-muted-foreground"
-                >
-                    No accounts found
-                </div>
             </Card>
         </div>
 
@@ -255,6 +252,18 @@ function deleteAkun() {
                 </h2>
 
                 <form @submit.prevent="submitForm" class="space-y-4">
+                    <FormField
+                        label="Account Code"
+                        name="kode_akun"
+                        :error="form.errors.kode_akun"
+                    >
+                        <Input
+                            v-model="form.kode_akun"
+                            placeholder="Leave blank to auto-generate (e.g. 111001)"
+                            :disabled="!!selectedAkun"
+                        />
+                    </FormField>
+
                     <FormField
                         label="Account Name"
                         name="nama_akun"
